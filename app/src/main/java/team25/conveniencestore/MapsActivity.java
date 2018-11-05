@@ -55,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136)
     );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +77,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
-
         etOrigin.setAdapter(placeAutoCompleteAdapter);
         etDestination.setAdapter(placeAutoCompleteAdapter);
+
+        btnFindPath.setEnabled(false);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng hcmus = new LatLng(10.762984, 106.682329);
         //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 25));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
 
         originMarkers.add(mMap.addMarker(new MarkerOptions()
                 .title("Đại học Khoa học tự nhiên")
@@ -139,6 +141,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
     }
 
     @Override
