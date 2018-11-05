@@ -4,21 +4,27 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -32,17 +38,23 @@ import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.Route;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener {
 
     private GoogleMap mMap;
     private Button btnFindPath;
-    private EditText etOrigin;
-    private EditText etDestination;
+    private AutoCompleteTextView etOrigin;
+    private AutoCompleteTextView etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
 
+    private PlaceAutoCompleteAdapter placeAutoCompleteAdapter;
+    private GoogleApiClient googleApiClient;
+
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-40, -168), new LatLng(71, 136)
+    );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +65,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
-        etOrigin = (EditText) findViewById(R.id.etOrigin);
-        etDestination = (EditText) findViewById(R.id.etDestination);
+        etOrigin = (AutoCompleteTextView) findViewById(R.id.etOrigin);
+        etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
 
+        googleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
+        placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
+
+        etOrigin.setAdapter(placeAutoCompleteAdapter);
+        etDestination.setAdapter(placeAutoCompleteAdapter);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,5 +196,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
