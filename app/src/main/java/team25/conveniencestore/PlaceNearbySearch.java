@@ -1,7 +1,10 @@
 package team25.conveniencestore;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -25,17 +28,17 @@ public class PlaceNearbySearch {
 
     private static final String NEARBY_SEARCH_PLACE_URL_API = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
-    private static final int PROXIMITY_RADIUS = 100;
+    private static final String TYPE_NEARBY_PLACE = "convenience_store";
+    private static final String DEFAULT_KEYWORD = "cua hang tien loi";
+    private static final int PROXIMITY_RADIUS = 500;
     private double latitude, longtitude;
-    private String nearbyPlace;
     private String keyWord;
     private GoogleMap mMap;
 
-    public PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String nearbyPlace, String keyWord){
+    public PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord){
         this.mMap = mMap;
         this.latitude = latitude;
         this.longtitude = longtitude;
-        this.nearbyPlace = nearbyPlace;
         this.keyWord = keyWord;
     }
 
@@ -45,13 +48,13 @@ public class PlaceNearbySearch {
     }
 
     private String createURL() throws UnsupportedEncodingException {
-        String urlNearbyPlace = URLEncoder.encode(nearbyPlace, "utf-8");
-        String urlKeyWord = URLEncoder.encode(keyWord, "utf-8");
+        //String urlNearbyPlace = URLEncoder.encode(TYPE_NEARBY_PLACE, "utf-8");
+        String urlKeyWord = URLEncoder.encode(DEFAULT_KEYWORD, "utf-8");
 
-        return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + ",%" + longtitude
+        return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + "," + longtitude
                 + "&radius=" + PROXIMITY_RADIUS
-                + "&type=" + nearbyPlace
-                + "&keyword=" + keyWord
+                + "&type=" + TYPE_NEARBY_PLACE
+                + "&keyword=" + urlKeyWord
                 + "&key=" +GOOGLE_API_KEY;
     }
 
@@ -108,9 +111,8 @@ public class PlaceNearbySearch {
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
                 mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
             }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longtitude), 15f));
         }
     }
 }

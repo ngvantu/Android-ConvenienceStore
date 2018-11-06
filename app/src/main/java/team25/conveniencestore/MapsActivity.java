@@ -42,6 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button btnFindPath;
+    private Button btnSearch;
     private AutoCompleteTextView etOrigin;
     private AutoCompleteTextView etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -51,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private PlaceAutoCompleteAdapter placeAutoCompleteAdapter;
     private GoogleApiClient googleApiClient;
+    private PlaceNearbySearch placeNearbySearch;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136)
@@ -66,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btnSearch = (Button) findViewById(R.id.btnSearch);
         etOrigin = (AutoCompleteTextView) findViewById(R.id.etOrigin);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
 
@@ -85,6 +88,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 sendRequest();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Search nearby", Toast.LENGTH_SHORT).show();
+                placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, "cua hang tien loi");
+                try {
+                    placeNearbySearch.execute();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -122,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng hcmus = new LatLng(10.762984, 106.682329);
+        LatLng hcmus = new LatLng(10.762683, 106.682108);
         //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
 
@@ -142,6 +158,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+
     }
 
     @Override
@@ -177,8 +195,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-            ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
-            ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
