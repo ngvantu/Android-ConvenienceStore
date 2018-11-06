@@ -48,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button btnFindPath;
-    private Button btnSearch;
+    private Button btnSearch, btnSearchNearMe;
     private AutoCompleteTextView etOrigin;
     private AutoCompleteTextView etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -89,9 +89,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         btnSearch = (Button) findViewById(R.id.btnSearch);
+        btnSearchNearMe = (Button) findViewById(R.id.btnSearchNearMe);
+
         etOrigin = (AutoCompleteTextView) findViewById(R.id.etOrigin);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
 
@@ -105,6 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
         etOrigin.setAdapter(placeAutoCompleteAdapter);
         etDestination.setAdapter(placeAutoCompleteAdapter);
+        etDestination.setEnabled(false);
 
         btnFindPath.setEnabled(false);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +124,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Search nearby", Toast.LENGTH_SHORT).show();
                 String keyWord = etOrigin.getText().toString();
                 placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, keyWord);
+                try {
+                    placeNearbySearch.execute();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
+                String keyWord = etOrigin.getText().toString();
+                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
