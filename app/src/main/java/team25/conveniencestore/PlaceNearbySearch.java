@@ -49,7 +49,7 @@ public class PlaceNearbySearch {
 
     private String createURL() throws UnsupportedEncodingException {
         //String urlNearbyPlace = URLEncoder.encode(TYPE_NEARBY_PLACE, "utf-8");
-        String urlKeyWord = URLEncoder.encode(DEFAULT_KEYWORD, "utf-8");
+        String urlKeyWord = URLEncoder.encode(keyWord, "utf-8");
 
         return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + "," + longtitude
                 + "&radius=" + PROXIMITY_RADIUS
