@@ -3,6 +3,7 @@ package team25.conveniencestore;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -49,6 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch, btnSearchNearMe;
+    private Button btnFeedback;
     private AutoCompleteTextView etOrigin;
     private AutoCompleteTextView etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -94,6 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         btnSearchNearMe = (Button) findViewById(R.id.btnSearchNearMe);
+        btnFeedback = (Button) findViewById(R.id.btnFeedback);
 
         etOrigin = (AutoCompleteTextView) findViewById(R.id.etOrigin);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
@@ -122,7 +125,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Search nearby", Toast.LENGTH_SHORT).show();
-                String keyWord = etOrigin.getText().toString();
+                String keyWord = etOrigin.getText().toString().trim();
+                if (keyWord.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, keyWord);
                 try {
                     placeNearbySearch.execute();
@@ -136,13 +143,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
-                String keyWord = etOrigin.getText().toString();
+                String keyWord = etOrigin.getText().toString().trim();
+                if (keyWord.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        btnFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, FeedbackActivity.class);
+                startActivity(i);
             }
         });
     }

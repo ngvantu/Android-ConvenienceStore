@@ -40,6 +40,11 @@
             android:layout_height="wrap_content"
             android:text="Near me!"
             android:id="@+id/btnSearchNearMe"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback"
+            android:id="@+id/btnFeedback"/>
     </LinearLayout>
 
     <fragment
