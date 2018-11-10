@@ -10,9 +10,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -22,12 +24,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -44,15 +53,17 @@ import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener,
-        LocationListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        DirectionFinderListener, LocationListener {
 
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch, btnSearchNearMe;
     private Button btnFeedback;
-    private AutoCompleteTextView etOrigin;
+    private Button btnDeleteInputSearch;
+    private AutoCompleteTextView mSearchText;
     private AutoCompleteTextView etDestination;
+    private Marker marker;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
@@ -80,14 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -98,7 +103,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnSearchNearMe = (Button) findViewById(R.id.btnSearchNearMe);
         btnFeedback = (Button) findViewById(R.id.btnFeedback);
 
-        etOrigin = (AutoCompleteTextView) findViewById(R.id.etOrigin);
+        btnDeleteInputSearch = (Button) findViewById(R.id.btnDeleteInputSearch);
+        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
 
         googleApiClient = new GoogleApiClient
@@ -109,7 +115,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
-        etOrigin.setAdapter(placeAutoCompleteAdapter);
+        mSearchText.setAdapter(placeAutoCompleteAdapter);
+
         etDestination.setAdapter(placeAutoCompleteAdapter);
         etDestination.setEnabled(false);
 
@@ -125,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Search nearby", Toast.LENGTH_SHORT).show();
-                String keyWord = etOrigin.getText().toString().trim();
+                String keyWord = mSearchText.getText().toString().trim();
                 if (keyWord.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
                     return;
@@ -143,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
-                String keyWord = etOrigin.getText().toString().trim();
+                String keyWord = mSearchText.getText().toString().trim();
                 if (keyWord.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
                     return;
@@ -164,10 +171,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(i);
             }
         });
+
+        btnDeleteInputSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchText.setText("");
+            }
+        });
     }
 
     private void sendRequest() {
-        String origin = etOrigin.getText().toString();
+        String origin = mSearchText.getText().toString();
         String destination = etDestination.getText().toString();
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
@@ -207,14 +221,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .title("Đại học Khoa học tự nhiên")
                 .position(hcmus)));
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -241,7 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
+            for (Polyline polyline : polylinePaths) {
                 polyline.remove();
             }
         }
