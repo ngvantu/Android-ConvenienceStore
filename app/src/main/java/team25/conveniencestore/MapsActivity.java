@@ -236,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         checkPermissions();
     }
-    
+
     private void sendRequest() {
         String origin = mSearchText.getText().toString();
         String destination = etDestination.getText().toString();

@@ -29,7 +29,7 @@ public class PlaceNearbySearch {
     private static final String NEARBY_SEARCH_PLACE_URL_API = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
     private static final String TYPE_NEARBY_PLACE = "convenience_store";
-    private static final String DEFAULT_KEYWORD = "cua hang tien loi";
+    private static final String DEFAULT_KEYWORD = "cửa hàng tiện lợi";
     private static final int PROXIMITY_RADIUS = 500;
     private double latitude, longtitude;
     private String keyWord;
