@@ -11,6 +11,10 @@ public class PlaceInfo {
     private String phoneNumber;
     private double rating;
 
+    /*
+    https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJTZvf6eMudTERJ-hZjCxTYTI&key=AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw
+     */
+
     public PlaceInfo(String placeID, LatLng latLng, String name, String address, String phoneNumber, double rating) {
         this.placeID = placeID;
         this.latLng = latLng;

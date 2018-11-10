@@ -55,6 +55,9 @@ public class PlaceNearbySearch {
                 + "&keyword=" + urlKeyWord
                 + "&key=" +GOOGLE_API_KEY;
         */
+        /*
+        https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.7624218,106.6790126&rankby=distance&type=convenience_store&keyword=c%E1%BB%ADa%20h%C3%A0ng%20ti%E1%BB%87n%20l%E1%BB%A3i&key=AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw
+         */
         return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + "," + longtitude
                 + "&rankby=distance"
                 + "&type=" + TYPE_NEARBY_PLACE
