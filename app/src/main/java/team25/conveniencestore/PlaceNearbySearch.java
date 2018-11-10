@@ -51,8 +51,15 @@ public class PlaceNearbySearch {
         //String urlNearbyPlace = URLEncoder.encode(TYPE_NEARBY_PLACE, "utf-8");
         String urlKeyWord = URLEncoder.encode(keyWord, "utf-8");
 
+        /*
         return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + "," + longtitude
                 + "&radius=" + PROXIMITY_RADIUS
+                + "&type=" + TYPE_NEARBY_PLACE
+                + "&keyword=" + urlKeyWord
+                + "&key=" +GOOGLE_API_KEY;
+        */
+        return NEARBY_SEARCH_PLACE_URL_API + "location=" + latitude + "," + longtitude
+                + "&rankby=distance"
                 + "&type=" + TYPE_NEARBY_PLACE
                 + "&keyword=" + urlKeyWord
                 + "&key=" +GOOGLE_API_KEY;
