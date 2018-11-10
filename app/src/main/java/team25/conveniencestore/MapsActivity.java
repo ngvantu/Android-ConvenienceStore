@@ -204,8 +204,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return;
                 }
                 try {
-                    placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
-                    placeNearbySearch.execute();
+                    if (currentLocation != null) {
+                        placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
+                        placeNearbySearch.execute();
+                    }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
