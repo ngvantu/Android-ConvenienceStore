@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -47,9 +48,7 @@
         </activity>
         <activity
             android:name=".FeedbackActivity"
-            android:label="@string/title_activity_feedback">
-
-        </activity>
+            android:label="@string/title_activity_feedback"></activity>
     </application>
 
 </manifest>

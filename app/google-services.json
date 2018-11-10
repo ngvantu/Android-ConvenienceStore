@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "989367370558",
+    "firebase_url": "https://android-conveniencestore.firebaseio.com",
+    "project_id": "android-conveniencestore",
+    "storage_bucket": "android-conveniencestore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989367370558:android:1de0db3fc15afb0a",
+        "android_client_info": {
+          "package_name": "team25.conveniencestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989367370558-6tspqkkp233b3hje38fgo7vfa3ig8st1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "team25.conveniencestore",
+            "certificate_hash": "b5b1e19e310cfaacc2202e1878a96f46ad6ac434"
+          }
+        },
+        {
+          "client_id": "989367370558-2sodb1ns120374oie56mgkj528gj2bpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "team25.conveniencestore",
+            "certificate_hash": "80b1a890826ba1750985a1b04c6659ac7a3bfe14"
+          }
+        },
+        {
+          "client_id": "989367370558-cgj1h1al5j6kg059isgkrdspllbaposa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwixBpyJe3b4Xo1xg74UUa3LyHPN8OnXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989367370558-cgj1h1al5j6kg059isgkrdspllbaposa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
