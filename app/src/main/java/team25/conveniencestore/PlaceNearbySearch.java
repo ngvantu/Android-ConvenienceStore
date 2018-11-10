@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -111,7 +112,24 @@ public class PlaceNearbySearch {
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);
                 markerOptions.snippet(placeID);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+                if(placeName.toLowerCase().contains("family"))
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.familymarker));
+                }
+                else if(placeName.toLowerCase().contains("circle"))
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.circlekmarker));
+                }
+                else if(placeName.toLowerCase().contains("mini"))
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ministopmarker));
+                }
+                else
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                }
+
 
                 mMap.addMarker(markerOptions);
             }
