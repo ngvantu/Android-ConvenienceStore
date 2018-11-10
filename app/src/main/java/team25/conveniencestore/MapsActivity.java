@@ -10,34 +10,26 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -167,6 +159,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
         mSearchText.setAdapter(placeAutoCompleteAdapter);
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handle = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchPlacesNearMe();
+                    handle = true;
+                }
+                return handle;
+            }
+        });
 
         etDestination.setAdapter(placeAutoCompleteAdapter);
         etDestination.setEnabled(false);
@@ -200,18 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
-                String keyWord = mSearchText.getText().toString().trim();
-                if (keyWord.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
-                try {
-                    placeNearbySearch.execute();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                searchPlacesNearMe();
             }
         });
 
@@ -256,6 +248,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void searchPlacesNearMe() {
+        Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
+        String keyWord = mSearchText.getText().toString().trim();
+        if (keyWord.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
+        try {
+            placeNearbySearch.execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
