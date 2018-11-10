@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import team25.conveniencestore.models.DirectionFinder;
+import team25.conveniencestore.models.PlaceInfo;
 
 public class PlaceNearbySearch {
 
@@ -96,23 +97,21 @@ public class PlaceNearbySearch {
 
         @Override
         protected void onPostExecute(String jsonString) {
-            List<HashMap<String, String>> nearbyPlaceList;
+            List<PlaceInfo> nearbyPlaceList;
             PlaceParser placeParser = new PlaceParser();
             nearbyPlaceList = placeParser.parseJson(jsonString);
             showNearbyPlaces(nearbyPlaceList);
         }
 
-        private void showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList) {
+        private void showNearbyPlaces(List<PlaceInfo> nearbyPlaceList) {
             for (int i = 0; i < nearbyPlaceList.size(); i++) {
                 MarkerOptions markerOptions = new MarkerOptions();
-                HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
+                PlaceInfo googlePlace = nearbyPlaceList.get(i);
 
-                String placeName = googlePlace.get("place_name");
-                String vicinity = googlePlace.get("vicinity");
-                double lat = Double.parseDouble(googlePlace.get("lat"));
-                double lng = Double.parseDouble(googlePlace.get("lng"));
+                String placeName = googlePlace.getName();
+                String vicinity = googlePlace.getVicinity();
+                LatLng latLng = googlePlace.getLatLng();
 
-                LatLng latLng = new LatLng(lat, lng);
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));

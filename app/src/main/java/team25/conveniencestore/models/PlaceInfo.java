@@ -7,9 +7,9 @@ public class PlaceInfo {
     private String name;
     private String vicinity;
     private LatLng latLng;
-    private float rating;
+    private double rating;
 
-    public PlaceInfo(String id, String name, String vicinity, LatLng latLng, float rating) {
+    public PlaceInfo(String id, String name, String vicinity, LatLng latLng, double rating) {
         this.id = id;
         this.name = name;
         this.vicinity = vicinity;
@@ -49,11 +49,11 @@ public class PlaceInfo {
         this.latLng = latLng;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 }

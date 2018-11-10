@@ -2,6 +2,9 @@ package team25.conveniencestore;
 
 import android.util.Log;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,9 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import team25.conveniencestore.models.PlaceInfo;
+
 public class PlaceParser {
 
-    public List<HashMap<String, String>> parseJson(String jsonData)
+    public List<PlaceInfo> parseJson(String jsonData)
     {
         JSONArray jsonArray = null;
         JSONObject jsonObject;
@@ -28,11 +33,12 @@ public class PlaceParser {
         return getPlaces(jsonArray);
     }
 
-    private List<HashMap<String, String>>getPlaces(JSONArray jsonArray)
+    private List<PlaceInfo>getPlaces(JSONArray jsonArray)
     {
         int count = jsonArray.length();
-        List<HashMap<String, String>> placeList = new ArrayList<>();
-        HashMap<String, String> placeMap = null;
+        //List<HashMap<String, String>> placeList = new ArrayList<>();
+        List<PlaceInfo> placeList = new ArrayList<>();
+        PlaceInfo placeMap = null;
 
         for(int i = 0; i<count;i++)
         {
@@ -46,13 +52,13 @@ public class PlaceParser {
         return placeList;
     }
 
-    private HashMap<String, String> getPlace(JSONObject googlePlaceJson)
+    private PlaceInfo getPlace(JSONObject googlePlaceJson)
     {
-        HashMap<String, String> googlePlaceMap = new HashMap<>();
         String placeName = "--NA--";
         String vicinity= "--NA--";
-        String latitude= "";
-        String longitude="";
+        double latitude= 0;
+        double longitude= 0;
+        double rating = 0;
         String reference="";
 
         Log.d("DataParser","jsonobject ="+googlePlaceJson.toString());
@@ -66,22 +72,18 @@ public class PlaceParser {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
 
-            latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
-            longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
+            if (!googlePlaceJson.isNull("rating")){
+                rating = googlePlaceJson.getDouble("rating");
+            }
+
+            latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+            longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
 
             reference = googlePlaceJson.getString("reference");
-
-            googlePlaceMap.put("place_name", placeName);
-            googlePlaceMap.put("vicinity", vicinity);
-            googlePlaceMap.put("lat", latitude);
-            googlePlaceMap.put("lng", longitude);
-            googlePlaceMap.put("reference", reference);
-
-
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-        return googlePlaceMap;
+        return new PlaceInfo(reference, placeName, vicinity, new LatLng(latitude, longitude), rating);
     }
 }
