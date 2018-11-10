@@ -3,26 +3,37 @@ package team25.conveniencestore.models;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlaceInfo {
-    private String id;
-    private String name;
-    private String vicinity;
+
+    private String placeID;
     private LatLng latLng;
+    private String name;
+    private String address;
+    private String phoneNumber;
     private double rating;
 
-    public PlaceInfo(String id, String name, String vicinity, LatLng latLng, double rating) {
-        this.id = id;
-        this.name = name;
-        this.vicinity = vicinity;
+    public PlaceInfo(String placeID, LatLng latLng, String name, String address, String phoneNumber, double rating) {
+        this.placeID = placeID;
         this.latLng = latLng;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
         this.rating = rating;
     }
 
-    public String getId() {
-        return id;
+    public String getPlaceID() {
+        return placeID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
     }
 
     public String getName() {
@@ -33,20 +44,20 @@ public class PlaceInfo {
         this.name = name;
     }
 
-    public String getVicinity() {
-        return vicinity;
+    public String getAddress() {
+        return address;
     }
 
-    public void setVicinity(String vicinity) {
-        this.vicinity = vicinity;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public double getRating() {

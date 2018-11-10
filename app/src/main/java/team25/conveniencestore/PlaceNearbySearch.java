@@ -1,10 +1,7 @@
 package team25.conveniencestore;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -19,11 +16,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
 
-import team25.conveniencestore.models.DirectionFinder;
-import team25.conveniencestore.models.PlaceInfo;
+import team25.conveniencestore.models.GooglePlace;
 
 public class PlaceNearbySearch {
 
@@ -97,23 +92,25 @@ public class PlaceNearbySearch {
 
         @Override
         protected void onPostExecute(String jsonString) {
-            List<PlaceInfo> nearbyPlaceList;
+            List<GooglePlace> nearbyPlaceList;
             PlaceParser placeParser = new PlaceParser();
             nearbyPlaceList = placeParser.parseJson(jsonString);
             showNearbyPlaces(nearbyPlaceList);
         }
 
-        private void showNearbyPlaces(List<PlaceInfo> nearbyPlaceList) {
+        private void showNearbyPlaces(List<GooglePlace> nearbyPlaceList) {
             for (int i = 0; i < nearbyPlaceList.size(); i++) {
                 MarkerOptions markerOptions = new MarkerOptions();
-                PlaceInfo googlePlace = nearbyPlaceList.get(i);
+                GooglePlace googlePlace = nearbyPlaceList.get(i);
 
                 String placeName = googlePlace.getName();
                 String vicinity = googlePlace.getVicinity();
                 LatLng latLng = googlePlace.getLatLng();
+                String placeID = googlePlace.getId();
 
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);
+                markerOptions.snippet(placeID);
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
                 mMap.addMarker(markerOptions);

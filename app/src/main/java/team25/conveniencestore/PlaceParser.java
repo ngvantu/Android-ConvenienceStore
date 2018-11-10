@@ -2,7 +2,6 @@ package team25.conveniencestore;
 
 import android.util.Log;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -10,14 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import team25.conveniencestore.models.PlaceInfo;
+import team25.conveniencestore.models.GooglePlace;
 
 public class PlaceParser {
 
-    public List<PlaceInfo> parseJson(String jsonData)
+    public List<GooglePlace> parseJson(String jsonData)
     {
         JSONArray jsonArray = null;
         JSONObject jsonObject;
@@ -33,12 +31,12 @@ public class PlaceParser {
         return getPlaces(jsonArray);
     }
 
-    private List<PlaceInfo>getPlaces(JSONArray jsonArray)
+    private List<GooglePlace>getPlaces(JSONArray jsonArray)
     {
         int count = jsonArray.length();
         //List<HashMap<String, String>> placeList = new ArrayList<>();
-        List<PlaceInfo> placeList = new ArrayList<>();
-        PlaceInfo placeMap = null;
+        List<GooglePlace> placeList = new ArrayList<>();
+        GooglePlace placeMap = null;
 
         for(int i = 0; i<count;i++)
         {
@@ -52,14 +50,14 @@ public class PlaceParser {
         return placeList;
     }
 
-    private PlaceInfo getPlace(JSONObject googlePlaceJson)
+    private GooglePlace getPlace(JSONObject googlePlaceJson)
     {
+        String placeID="";
         String placeName = "--NA--";
         String vicinity= "--NA--";
         double latitude= 0;
         double longitude= 0;
         double rating = 0;
-        String reference="";
 
         Log.d("DataParser","jsonobject ="+googlePlaceJson.toString());
 
@@ -79,11 +77,11 @@ public class PlaceParser {
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
 
-            reference = googlePlaceJson.getString("reference");
+            placeID = googlePlaceJson.getString("reference");
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-        return new PlaceInfo(reference, placeName, vicinity, new LatLng(latitude, longitude), rating);
+        return new GooglePlace(placeID, placeName, vicinity, new LatLng(latitude, longitude), rating);
     }
 }
