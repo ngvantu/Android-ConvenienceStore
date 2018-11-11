@@ -192,7 +192,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, keyWord);
+                placeNearbySearch = new PlaceNearbySearch(mMap, 10.7624218, 106.6790126, keyWord);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
@@ -256,9 +256,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
         }
-        placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
         try {
-            placeNearbySearch.execute();
+            if (currentLocation != null) {
+                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
+                placeNearbySearch.execute();
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -277,7 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng hcmus = new LatLng(10.762683, 106.682108);
+        LatLng hcmus = new LatLng(10.7624218, 106.6790126);
         //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
 
