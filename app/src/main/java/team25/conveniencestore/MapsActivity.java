@@ -294,14 +294,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(getApplicationContext(), "Id: " + marker.getId() + "\nTitle: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+            public void onInfoWindowClick(Marker marker) {
                 Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", marker.getSnippet());
                 startActivity(i);
-                return false;
             }
         });
     }
