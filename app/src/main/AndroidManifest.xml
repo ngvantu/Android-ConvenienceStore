@@ -48,6 +48,7 @@
             android:label="@string/title_activity_feedback">
 
         </activity>
+        <activity android:name=".PlaceInfoActivity"></activity>
     </application>
 
 </manifest>

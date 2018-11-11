@@ -298,6 +298,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Toast.makeText(getApplicationContext(), "Id: " + marker.getId() + "\nTitle: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
+                i.putExtra("PLACE_ID", marker.getSnippet());
+                startActivity(i);
                 return false;
             }
         });
