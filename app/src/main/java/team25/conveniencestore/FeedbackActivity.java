@@ -1,14 +1,17 @@
 package team25.conveniencestore;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FeedbackActivity extends Activity {
 
@@ -80,7 +83,14 @@ public class FeedbackActivity extends Activity {
         try {
             myRef.child("tittle").setValue(title);
             myRef.child("content").setValue(content);
-            Toast.makeText(getApplicationContext(), "Đã gửi. Cảm ơn góp ý phản hồi của bạn", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder myBuider = new AlertDialog.Builder(this);
+            myBuider.setTitle("Cảm ơn")
+                    .setMessage("Cảm ơn góp ý phản hồi của bạn")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+            etTitle.setText("");
+            etContent.setText("");
         }
         catch (Exception e)
         {

@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location currentLocation;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(-40, -168), new LatLng(71, 136)
+            new LatLng(8.1790665, 102.14441), new LatLng(23.393395, 114.3337595)
     );
 
     /**
@@ -192,7 +192,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                placeNearbySearch = new PlaceNearbySearch(mMap, 10.7624218, 106.6790126, keyWord);
+                placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, keyWord);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
@@ -279,7 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng hcmus = new LatLng(10.7624218, 106.6790126);
+        LatLng hcmus = new LatLng(10.762683, 106.682108);
         //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
 
