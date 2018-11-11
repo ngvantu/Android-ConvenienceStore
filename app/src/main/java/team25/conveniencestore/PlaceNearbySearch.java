@@ -118,15 +118,23 @@ public class PlaceNearbySearch {
 
                 if(placeName.toLowerCase().contains("family"))
                 {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.familymarker));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
                 }
                 else if(placeName.toLowerCase().contains("circle"))
                 {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.circlekmarker));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
                 }
                 else if(placeName.toLowerCase().contains("mini"))
                 {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ministopmarker));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
+                }
+                else if(placeName.toLowerCase().contains("b's"))
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
+                }
+                else if(placeName.toLowerCase().contains("vinmart"))
+                {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
                 }
                 else
                 {
