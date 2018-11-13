@@ -16,6 +16,8 @@ import com.android.volley.toolbox.Volley;
 
 import team25.conveniencestore.models.DirectionFinder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class PlaceInfoActivity extends FragmentActivity {
@@ -24,6 +26,7 @@ public class PlaceInfoActivity extends FragmentActivity {
     private TextView txtAddress;
     private TextView txtPhone;
     private TextView txtRating;
+    private TextView txtError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class PlaceInfoActivity extends FragmentActivity {
         txtAddress = (TextView) findViewById(R.id.placeinfo_address);
         txtPhone = (TextView) findViewById(R.id.placeinfo_phone);
         txtRating = (TextView) findViewById(R.id.placeinfo_rating);
+        txtError = (TextView) findViewById(R.id.error_message);
 
         String API_KEY = DirectionFinder.GOOGLE_API_KEY;
         Bundle bundle = getIntent().getExtras();
@@ -48,7 +52,30 @@ public class PlaceInfoActivity extends FragmentActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    txtAddress.setText(response.substring(0, 100));
+                    Log.v("responsefromrequest", response);
+                    try {
+                        JSONObject jsonRes = new JSONObject(response);
+
+                        if (jsonRes.get("status").toString().equalsIgnoreCase("OK")) {
+                            // Fetch thanh cong
+                            jsonRes = jsonRes.getJSONObject("result");
+
+                            String formattedAddress = jsonRes.get("formatted_address").toString();
+                            String storeName = jsonRes.get("name").toString();
+                            String formattedPhone = jsonRes.get("formatted_phone_number").toString();
+                            String ratingPoint = jsonRes.get("rating").toString();
+
+                            txtName.setText(storeName);
+                            txtAddress.setText(formattedAddress);
+                            txtPhone.setText(formattedPhone);
+                            txtRating.setText(ratingPoint + "/5");
+                        } else {
+                            // Fetch that bai, API Key bi gioi han thoi gian su dung trong 1 ngay
+                            txtError.setText("Error: " + jsonRes.get("error_message").toString());
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
