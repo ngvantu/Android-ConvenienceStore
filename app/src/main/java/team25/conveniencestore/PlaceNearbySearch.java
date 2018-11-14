@@ -7,6 +7,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
@@ -116,35 +117,39 @@ public class PlaceNearbySearch {
                 markerOptions.title(placeName + " : " + vicinity);
                 markerOptions.snippet(placeID);
 
-                if(placeName.toLowerCase().contains("family"))
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
-                }
-                else if(placeName.toLowerCase().contains("circle"))
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
-                }
-                else if(placeName.toLowerCase().contains("mini"))
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
-                }
-                else if(placeName.toLowerCase().contains("b's"))
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
-                }
-                else if(placeName.toLowerCase().contains("vinmart"))
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
-                }
-                else
-                {
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                }
-
+                makeMarkerIconForStore(markerOptions, placeName);
 
                 mMap.addMarker(markerOptions);
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longtitude), 15f));
+        }
+
+        void makeMarkerIconForStore(MarkerOptions markerOptions, String storeName)
+        {
+            if(storeName.toLowerCase().contains("family"))
+            {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
+            }
+            else if(storeName.toLowerCase().contains("circle"))
+            {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
+            }
+            else if(storeName.toLowerCase().contains("mini"))
+            {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
+            }
+            else if(storeName.toLowerCase().contains("b's"))
+            {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
+            }
+            else if(storeName.toLowerCase().contains("vinmart"))
+            {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
+            }
+            else
+            {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ public class PlaceInfoActivity extends FragmentActivity {
         txtRating = (TextView) findViewById(R.id.placeinfo_rating);
         txtError = (TextView) findViewById(R.id.error_message);
 
-        String API_KEY = DirectionFinder.GOOGLE_API_KEY;
+        String API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
         Bundle bundle = getIntent().getExtras();
         String placeID = bundle.getString("PLACE_ID");
 
