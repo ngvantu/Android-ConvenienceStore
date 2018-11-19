@@ -33,7 +33,7 @@ public class PlaceNearbySearch {
     private String keyWord;
     private GoogleMap mMap;
 
-    public PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord){
+    PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord){
         this.mMap = mMap;
         this.latitude = latitude;
         this.longtitude = longtitude;

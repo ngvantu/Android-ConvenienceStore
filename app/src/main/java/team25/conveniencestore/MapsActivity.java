@@ -1,6 +1,7 @@
 package team25.conveniencestore;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +16,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Layout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -77,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Location currentLocation;
+    private LatLng pickingLocation = null;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(8.1790665, 102.14441), new LatLng(23.393395, 114.3337595)
@@ -184,8 +189,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return handle;
             }
         });
+        mSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (pickingLocation == null){
+                    searchPlacesNearMe();
+                }
+                else {
+                    String keyWord = mSearchText.getText().toString();
+                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord);
+                    try {
+                        placeNearbySearch.execute();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         etDestination.setAdapter(placeAutoCompleteAdapter);
+        etDestination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FindPlace findPlace = new FindPlace(mMap, etDestination.getText().toString());
+                try {
+                    findPlace.execute();
+                    pickingLocation = mMap.getCameraPosition().target;
+                    String inputString = mSearchText.getText().toString();
+                    if (inputString.isEmpty()){
+                        inputString = "Cửa hàng tiện lợi";
+                    }
+                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, inputString);
+                    placeNearbySearch.execute();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         btnFindPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,10 +252,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 String keyWord = mSearchText.getText().toString().trim();
                 if (keyWord.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
-                    return;
+                    keyWord = "Cửa hàng tiện lợi";
                 }
-                placeNearbySearch = new PlaceNearbySearch(mMap, 10.762683, 106.682108, keyWord);
+                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
@@ -250,6 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 etDestination.setText("");
+                pickingLocation = null;
                 linearLayoutFindPlace.setVisibility(View.GONE);
                 btnFindPlace.setVisibility(View.VISIBLE);
             }
@@ -282,7 +322,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void searchPlacesNearMe() {
-        Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
         String keyWord = mSearchText.getText().toString().trim();
         if (keyWord.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
@@ -314,10 +354,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng hcmus = new LatLng(10.762683, 106.682108);
         //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
-
-        originMarkers.add(mMap.addMarker(new MarkerOptions()
-                .title("Đại học Khoa học tự nhiên")
-                .position(hcmus)));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

@@ -119,14 +119,14 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/btnFindPath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:text="Find path"
             android:visibility="gone"
             map:layout_constraintHorizontal_chainStyle="packed"
@@ -137,7 +137,6 @@
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="Search"
             map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintEnd_toStartOf="@+id/btnSearchNearMe"
@@ -148,7 +147,6 @@
             android:id="@+id/btnSearchNearMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="Near me!"
             map:layout_constraintEnd_toStartOf="@+id/btnFeedback"
             map:layout_constraintStart_toEndOf="@+id/btnSearch"
@@ -158,7 +156,6 @@
             android:id="@+id/btnFeedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="Feedback"
             map:layout_constraintEnd_toEndOf="parent"
