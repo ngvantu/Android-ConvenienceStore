@@ -176,7 +176,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void searchPlacesNearMe() {
-        //Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
         String keyWord = mSearchText.getText().toString().trim();
         if (keyWord.isEmpty()) {
             keyWord = "Cửa hàng tiện lợi";
@@ -185,11 +184,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (currentLocation != null) {
                 placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, resultStores);
                 placeNearbySearch.execute();
+            } else {
+                Toast.makeText(getApplicationContext(), "Chưa tìm thấy GPS", Toast.LENGTH_SHORT).show();
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
+
+    private void searchPlacesNearPosition() {
+        String keyWord = mSearchText.getText().toString().trim();
+        if (keyWord.isEmpty()){
+            keyWord = "Cửa hàng tiện lợi";
+        }
+
+        try {
+            if (pickingLocation != null) {
+                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
+                placeNearbySearch.execute();
+            } else {
+                Toast.makeText(getApplicationContext(), "Chưa chọn địa điểm", Toast.LENGTH_SHORT).show();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -275,18 +295,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (pickingLocation == null){
-                    searchPlacesNearMe();
-                }
-                else {
-                    String keyWord = mSearchText.getText().toString();
-                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
-                    try {
-                        placeNearbySearch.execute();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
+                searchPlacesNearPosition();
             }
         });
 
@@ -299,12 +308,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     findPlace.execute();
                     pickingLocation = mMap.getCameraPosition().target;
-                    String inputString = mSearchText.getText().toString();
-                    if (inputString.isEmpty()){
-                        inputString = "Cửa hàng tiện lợi";
-                    }
-                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, inputString, resultStores);
-                    placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -329,17 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickingLocation = mMap.getCameraPosition().target;
-                String keyWord = mSearchText.getText().toString().trim();
-                if (keyWord.isEmpty()) {
-                    keyWord = "Cửa hàng tiện lợi";
-                }
-                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
-                try {
-                    placeNearbySearch.execute();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                searchPlacesNearPosition();
             }
         });
 
