@@ -46,6 +46,7 @@ import java.util.List;
 
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
+import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -63,6 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+    private List<GooglePlace> resultStores = new ArrayList<>();
     private ProgressDialog progressDialog;
 
     private Button btnFindPlace;
@@ -181,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         try {
             if (currentLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
+                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, resultStores);
                 placeNearbySearch.execute();
             }
         } catch (UnsupportedEncodingException e) {
@@ -278,7 +280,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else {
                     String keyWord = mSearchText.getText().toString();
-                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord);
+                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
                     try {
                         placeNearbySearch.execute();
                     } catch (UnsupportedEncodingException e) {
@@ -301,7 +303,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (inputString.isEmpty()){
                         inputString = "Cửa hàng tiện lợi";
                     }
-                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, inputString);
+                    placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, inputString, resultStores);
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -327,16 +329,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String place = etDestination.getText().toString().trim();
-                if (place.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Please find place before searching!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                pickingLocation = mMap.getCameraPosition().target;
                 String keyWord = mSearchText.getText().toString().trim();
                 if (keyWord.isEmpty()) {
                     keyWord = "Cửa hàng tiện lợi";
                 }
-                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord);
+                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
                 try {
                     placeNearbySearch.execute();
                 } catch (UnsupportedEncodingException e) {

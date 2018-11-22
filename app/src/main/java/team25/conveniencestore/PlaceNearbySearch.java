@@ -1,6 +1,7 @@
 package team25.conveniencestore;
 
 import android.os.AsyncTask;
+import android.widget.ArrayAdapter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import team25.conveniencestore.models.GooglePlace;
@@ -32,12 +34,14 @@ public class PlaceNearbySearch {
     private double latitude, longtitude;
     private String keyWord;
     private GoogleMap mMap;
+    private List<GooglePlace> resultStore;
 
-    PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord){
+    PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord, List<GooglePlace> resultStore){
         this.mMap = mMap;
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.keyWord = keyWord;
+        this.resultStore = resultStore;
     }
 
     public void execute() throws UnsupportedEncodingException {
@@ -104,6 +108,9 @@ public class PlaceNearbySearch {
         }
 
         private void showNearbyPlaces(List<GooglePlace> nearbyPlaceList) {
+            mMap.clear();
+            resultStore.clear();
+            resultStore.addAll(nearbyPlaceList);
             for (int i = 0; i < nearbyPlaceList.size(); i++) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 GooglePlace googlePlace = nearbyPlaceList.get(i);
