@@ -14,7 +14,7 @@ public class StoreItemAutoComplete {
         return storeName;
     }
 
-    public int getFlagImage() {
+    public int getLogoImage() {
         return logoImage;
     }
 }
