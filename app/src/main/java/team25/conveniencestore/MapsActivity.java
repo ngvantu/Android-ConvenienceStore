@@ -69,7 +69,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button btnDeleteInputSearchPlace;
 
     private LinearLayout linearLayoutFindPlace;
-    private PlaceAutoCompleteAdapter placeAutoCompleteAdapter;
     private GoogleApiClient googleApiClient;
     private PlaceNearbySearch placeNearbySearch;
 
@@ -143,14 +142,88 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        onServicesReady();
+
+        mappingController();
+        settingController();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        checkPermissions();
+    }
+
+    private void sendRequest() {
+        String origin = mSearchText.getText().toString();
+        String destination = etDestination.getText().toString();
+        if (origin.isEmpty()) {
+            Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (destination.isEmpty()) {
+            Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            new DirectionFinder(this, origin, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void searchPlacesNearMe() {
+        //Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
+        String keyWord = mSearchText.getText().toString().trim();
+        if (keyWord.isEmpty()) {
+            keyWord = "Cửa hàng tiện lợi";
+        }
+        try {
+            if (currentLocation != null) {
+                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
+                placeNearbySearch.execute();
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng hcmus = new LatLng(10.762683, 106.682108);
+        //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
-        currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
+                i.putExtra("PLACE_ID", marker.getSnippet());
+                startActivity(i);
+            }
+        });
+    }
+
+    private void mappingController() {
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
         linearLayoutFindPlace = (LinearLayout) findViewById(R.id.relLayout2);
 
@@ -163,16 +236,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         btnDeleteInputSearchPlace = (Button) findViewById(R.id.btnDeleteInputSearchPlace);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
+    }
 
-        googleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-
-        placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
-
+    private void settingController() {
         StoreAutoCompleteAdapter storeAutoCompleteAdapter = new StoreAutoCompleteAdapter(this);
         mSearchText.setThreshold(1);
         mSearchText.setAdapter(storeAutoCompleteAdapter);
@@ -222,6 +288,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
         etDestination.setAdapter(placeAutoCompleteAdapter);
         etDestination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -311,80 +378,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        checkPermissions();
-    }
-
-    private void sendRequest() {
-        String origin = mSearchText.getText().toString();
-        String destination = etDestination.getText().toString();
-        if (origin.isEmpty()) {
-            Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (destination.isEmpty()) {
-            Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            new DirectionFinder(this, origin, destination).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void searchPlacesNearMe() {
-        //Toast.makeText(getApplicationContext(), "Search nearby me", Toast.LENGTH_SHORT).show();
-        String keyWord = mSearchText.getText().toString().trim();
-        if (keyWord.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            if (currentLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord);
-                placeNearbySearch.execute();
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng hcmus = new LatLng(10.762683, 106.682108);
-        //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
-
+    private void onServicesReady() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
-                i.putExtra("PLACE_ID", marker.getSnippet());
-                startActivity(i);
-            }
-        });
+        googleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
     }
 
     @Override
