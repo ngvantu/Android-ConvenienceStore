@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,34 +9,82 @@
     tools:context="team25.conveniencestore.FeedbackActivity">
 
 
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Người gửi"
+            android:layout_marginRight="18dp"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#930000"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiêu đề"
+            android:textColor="#006e28"
+            android:textSize="15sp"/>
 
         <EditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tiêu đề feedback"
+            android:paddingLeft="5dp"
+            android:background="@drawable/custom_edittext_feedback"
             android:cursorVisible="true"
             android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
 
 
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nội dung"
+            android:textColor="#006e28"
+            android:textSize="15sp"/>
 
         <EditText
             android:id="@+id/etContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/custom_edittext_feedback"
             android:cursorVisible="true"
-            android:hint="Nội dung feedback"
-            android:inputType="textMultiLine" />
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="10"
+            android:maxLines="12"
+            android:minLines="10"
+            android:paddingLeft="5dp"
+            android:scrollbars="vertical" />
 
-    </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
