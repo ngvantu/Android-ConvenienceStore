@@ -1,7 +1,6 @@
 package team25.conveniencestore;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Layout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -177,7 +172,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
-        mSearchText.setAdapter(placeAutoCompleteAdapter);
+
+        StoreAutoCompleteAdapter storeAutoCompleteAdapter = new StoreAutoCompleteAdapter(this);
+        mSearchText.setThreshold(1);
+        mSearchText.setAdapter(storeAutoCompleteAdapter);
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -187,6 +185,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     handle = true;
                 }
                 return handle;
+            }
+        });
+        // Show all suggestions on first click
+        mSearchText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchText.setText(" ");
+            }
+        });
+        // Reset if dismiss and no entered text
+        mSearchText.setOnDismissListener(new AutoCompleteTextView.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                String input = mSearchText.getText().toString().trim();
+                if (input.isEmpty()) {
+                    mSearchText.setText("");
+                }
             }
         });
         mSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
