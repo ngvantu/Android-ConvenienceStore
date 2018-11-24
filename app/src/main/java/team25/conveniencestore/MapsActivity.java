@@ -24,6 +24,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -310,7 +311,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
+        final PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
         etDestination.setAdapter(placeAutoCompleteAdapter);
         etDestination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -327,8 +328,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnFindPlace.setVisibility(View.GONE);
-                linearLayoutFindPlace.setVisibility(View.VISIBLE);
+                //btnFindPlace.setVisibility(View.GONE);
+                //linearLayoutFindPlace.setVisibility(View.VISIBLE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+                View view = getLayoutInflater().inflate(R.layout.dialog_findplace, null);
+                builder.setView(view);
+                builder.setCancelable(true);
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                final AutoCompleteTextView actvFindPlace = (AutoCompleteTextView) view.findViewById(R.id.actvFindPlace);
+                ImageButton imgbtnFindPlace = (ImageButton) view.findViewById(R.id.imgbtnFindPlace);
+                Button btnFind = (Button) view.findViewById(R.id.dlg_FindPlace_btnFind);
+                Button btnClose = (Button) view.findViewById(R.id.dlg_FindPlace_btnClose);
+
+                actvFindPlace.setAdapter(placeAutoCompleteAdapter);
+
+                imgbtnFindPlace.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), "Chọn trên bản đồ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                btnFind.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String input = actvFindPlace.getText().toString();
+                        if (input.isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        FindPlace findPlace = new FindPlace(mMap, input);
+                        try {
+                            findPlace.execute();
+                            pickingLocation = mMap.getCameraPosition().target;
+                            alertDialog.dismiss();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
             }
         });
 
