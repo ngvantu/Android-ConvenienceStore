@@ -15,4 +15,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="entry_find">Find</string>
     <string name="entry_title">Find Store</string>
+    <string name="title_activity_place_info">PlaceInfoActivity</string>
+    <string name="tab_text_1">Tổng quan</string>
+    <string name="tab_text_2">Dữ liệu Google</string>
+    <string name="tab_text_3">Đánh giá</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

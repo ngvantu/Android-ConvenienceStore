@@ -47,8 +47,11 @@
         </activity>
         <activity
             android:name=".FeedbackActivity"
-            android:label="@string/title_activity_feedback"></activity>
-        <activity android:name=".PlaceInfoActivity" />
+            android:label="@string/title_activity_feedback" />
+        <activity
+            android:name=".PlaceInfoActivity"
+            android:label="@string/title_activity_place_info"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
