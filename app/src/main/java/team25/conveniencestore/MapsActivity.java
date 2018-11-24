@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import team25.conveniencestore.adapter.ResultStoresAdapter;
+import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -59,7 +60,7 @@ import team25.conveniencestore.models.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
-        DirectionFinderListener, LocationListener {
+        DirectionFinderListener, LocationListener{
 
     private GoogleMap mMap;
     private Button btnFindPath;
@@ -360,7 +361,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
                 rcvResultStores.setHasFixedSize(true);
 
-                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores);
+                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(new OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(int position) {
+                        Toast.makeText(getApplicationContext(), "Posotion" + position, Toast.LENGTH_SHORT).show();
+                    }
+                },resultStores);
                 rcvResultStores.setAdapter(rsAdapter);
                 rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 

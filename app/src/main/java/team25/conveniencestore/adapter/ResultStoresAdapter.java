@@ -31,13 +31,21 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
             address = (TextView) itemView.findViewById(R.id.dlg_store_adress);
             star = (TextView) itemView.findViewById(R.id.dlg_store_star);
             ratingBar = (RatingBar) itemView.findViewById(R.id.dlg_ratingbar);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.OnItemClick(getAdapterPosition());
+                }
+            });
         }
     }
 
     // constuctor
     private List<GooglePlace> resultStores;
+    private OnItemClickListener onItemClickListener;
 
-    public ResultStoresAdapter(List<GooglePlace> resultStores) {
+    public ResultStoresAdapter(OnItemClickListener onItemClickListener, List<GooglePlace> resultStores) {
+        this.onItemClickListener = onItemClickListener;
         this.resultStores = resultStores;
     }
 
@@ -64,5 +72,7 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
         return resultStores.size();
     }
 
-
+    public interface OnItemClickListener {
+        void OnItemClick(int position);
+    }
 }
