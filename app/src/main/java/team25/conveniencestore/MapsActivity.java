@@ -16,6 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -48,6 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -354,17 +357,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
-                ListView lv = (ListView) mView.findViewById(R.id.ListViewStore);
-                ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.custom_result_store_row, resultStores);
-                lv.setAdapter(adapter);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
-                        i.putExtra("PLACE_ID", resultStores.get(position).getId());
-                        startActivity(i);
-                    }
-                });
+                RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
+                rcvResultStores.setHasFixedSize(true);
+
+                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores);
+                rcvResultStores.setAdapter(rsAdapter);
+                rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
                 mBuilder.setView(mView);
                 mBuilder.setCancelable(true);
                 AlertDialog alertDialog = mBuilder.create();

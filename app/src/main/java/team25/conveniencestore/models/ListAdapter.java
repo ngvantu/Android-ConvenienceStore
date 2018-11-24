@@ -37,7 +37,7 @@ public class ListAdapter extends ArrayAdapter<GooglePlace> {
 
             TextView star = (TextView) view.findViewById(R.id.dlg_store_star);
             star.setText(String.valueOf(p.getRating()));
-            RatingBar ratingBar = (RatingBar) view.findViewById(R.id.dig_ratingbar);
+            RatingBar ratingBar = (RatingBar) view.findViewById(R.id.dlg_ratingbar);
             ratingBar.setRating(Float.parseFloat(star.getText().toString()));
             LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);

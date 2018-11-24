@@ -16,7 +16,7 @@ public class CustomListStore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_result_stores);
 
-    lv = (ListView) findViewById(R.id.ListViewStore);
+    //lv = (ListView) findViewById(R.id.ListViewStore);
 
         ArrayList<Store> ArrayStore = new ArrayList<Store>();
         ArrayStore.add(new Store("Circle K Bui Vien", Float.valueOf("2"), "135B Tran Hung Dao, Quan 1"));
