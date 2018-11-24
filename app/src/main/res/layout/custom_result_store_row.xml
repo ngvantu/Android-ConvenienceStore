@@ -13,10 +13,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/store_name"
+            android:id="@+id/dlg_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="Name"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="16dp"
             android:textSize="20dp"
@@ -28,32 +28,30 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/store_goal"
+                android:id="@+id/dlg_store_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="0"
+                android:textColor="#000"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="35dp"
-
                 android:paddingRight="5dp"
                 android:textSize="14dp"/>
 
             <RatingBar
-                android:id="@+id/ratingbar"
+                android:id="@+id/dig_ratingbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style = "?android:attr/ratingBarStyleSmall"
-                android:rating="3.5"
+                android:rating="0"
                 android:numStars="5"
-                android:stepSize="0.1"
-
-                />
+                android:stepSize="0.1"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/store_adress"
+            android:id="@+id/dlg_store_adress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="Address"
             tools:layout_editor_absoluteX="15dp"
             tools:layout_editor_absoluteY="54dp"
             android:textSize="14dp"

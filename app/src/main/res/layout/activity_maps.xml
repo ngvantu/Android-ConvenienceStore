@@ -116,7 +116,7 @@
             android:textSize="12dp"/>
     </RelativeLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,39 +128,33 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Find path"
-            android:visibility="gone"
-            map:layout_constraintHorizontal_chainStyle="packed"
-            map:layout_constraintStart_toStartOf="parent"
-            map:layout_constraintTop_toTopOf="parent" />
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintEnd_toStartOf="@+id/btnSearchNearMe"
-            map:layout_constraintStart_toEndOf="@+id/btnFindPath"
-            map:layout_constraintTop_toTopOf="parent" />
+            android:text="Search" />
 
         <Button
             android:id="@+id/btnSearchNearMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Near me!"
-            map:layout_constraintEnd_toStartOf="@+id/btnFeedback"
-            map:layout_constraintStart_toEndOf="@+id/btnSearch"
-            map:layout_constraintTop_toTopOf="parent" />
+            android:text="Near me!" />
+
+        <Button
+            android:id="@+id/btnResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KQ"/>
 
         <Button
             android:id="@+id/btnFeedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Feedback"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+            android:text="Feedback" />
+    </LinearLayout>
 
     <fragment
         android:id="@+id/map"

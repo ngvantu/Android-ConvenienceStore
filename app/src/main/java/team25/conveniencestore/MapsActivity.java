@@ -1,8 +1,10 @@
 package team25.conveniencestore;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ import java.util.List;
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.GooglePlace;
+import team25.conveniencestore.models.ListAdapter;
 import team25.conveniencestore.models.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -56,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch, btnSearchNearMe;
-    private Button btnFeedback;
+    private Button btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private AutoCompleteTextView mSearchText;
     private AutoCompleteTextView etDestination;
@@ -252,6 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         btnSearchNearMe = (Button) findViewById(R.id.btnSearchNearMe);
+        btnResult = (Button) findViewById(R.id.btnResult);
         btnFeedback = (Button) findViewById(R.id.btnFeedback);
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
@@ -340,6 +345,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 searchPlacesNearMe();
+            }
+        });
+
+        btnResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
+                ListView lv = (ListView) mView.findViewById(R.id.ListViewStore);
+                ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.custom_result_store_row, resultStores);
+                lv.setAdapter(adapter);
+                mBuilder.setView(mView).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dialog.dismiss();
+                    }
+                });
+                mBuilder.show();
             }
         });
 

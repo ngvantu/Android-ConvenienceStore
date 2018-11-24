@@ -15,9 +15,9 @@ import java.util.List;
 
 import team25.conveniencestore.R;
 
-public class ListAdapter extends ArrayAdapter<Store> {
+public class ListAdapter extends ArrayAdapter<GooglePlace> {
 
-    public ListAdapter(Context context, int resource, List<Store> items) {
+    public ListAdapter(Context context, int resource, List<GooglePlace> items) {
         super(context, resource, items);
     }
 
@@ -27,26 +27,25 @@ public class ListAdapter extends ArrayAdapter<Store> {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view =  inflater.inflate(R.layout.store_list_line, null);
+            view =  inflater.inflate(R.layout.custom_result_store_row, null);
         }
-        Store p = getItem(position);
+        GooglePlace p = getItem(position);
         if (p != null) {
             // Anh xa + Gan gia tri
-            TextView name = (TextView) view.findViewById(R.id.store_name);
-            name.setText(p.name);
+            TextView name = (TextView) view.findViewById(R.id.dlg_store_name);
+            name.setText(p.getName());
 
-            TextView goal = (TextView) view.findViewById(R.id.store_goal);
-            goal.setText(String.valueOf( p.star));
-            RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingbar);
-            ratingBar.setRating(p.star);
+            TextView star = (TextView) view.findViewById(R.id.dlg_store_star);
+            star.setText(String.valueOf(p.getRating()));
+            RatingBar ratingBar = (RatingBar) view.findViewById(R.id.dig_ratingbar);
+            ratingBar.setRating(Float.parseFloat(star.getText().toString()));
             LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(0).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(1).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
-            TextView adrress = (TextView) view.findViewById(R.id.store_adress);
-            adrress.setText(p.Address);
-
+            TextView adrress = (TextView) view.findViewById(R.id.dlg_store_adress);
+            adrress.setText(p.getVicinity());
         }
         return view;
     }

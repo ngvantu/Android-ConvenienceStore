@@ -14,7 +14,7 @@ public class CustomListStore extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_list_store);
+        setContentView(R.layout.dialog_result_stores);
 
     lv = (ListView) findViewById(R.id.ListViewStore);
 
@@ -25,10 +25,5 @@ public class CustomListStore extends AppCompatActivity {
         ArrayStore.add(new Store("Circle K Bui Vien3",Float.valueOf("3.8"), "135B Tran Hung Dao, Quan 1"));
         ArrayStore.add(new Store("Circle K Bui Vien4",Float.valueOf("4.3"), "135B Tran Hung Dao, Quan 1"));
 
-        team25.conveniencestore.models.ListAdapter adapter = new team25.conveniencestore.models.ListAdapter(CustomListStore.this
-        ,R.layout.store_list_line
-        , ArrayStore);
-
-        lv.setAdapter(adapter);
     }
 }
