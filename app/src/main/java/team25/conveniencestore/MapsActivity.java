@@ -46,6 +46,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
@@ -356,13 +357,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ListView lv = (ListView) mView.findViewById(R.id.ListViewStore);
                 ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.custom_result_store_row, resultStores);
                 lv.setAdapter(adapter);
-                mBuilder.setView(mView).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        dialog.dismiss();
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
+                        i.putExtra("PLACE_ID", resultStores.get(position).getId());
+                        startActivity(i);
                     }
                 });
-                mBuilder.show();
+                mBuilder.setView(mView);
+                mBuilder.setCancelable(true);
+                AlertDialog alertDialog = mBuilder.create();
+                alertDialog.setCanceledOnTouchOutside(true);
+                alertDialog.show();
             }
         });
 
