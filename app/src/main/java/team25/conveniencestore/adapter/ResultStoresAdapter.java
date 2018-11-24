@@ -44,9 +44,9 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
     private List<GooglePlace> resultStores;
     private OnItemClickListener onItemClickListener;
 
-    public ResultStoresAdapter(OnItemClickListener onItemClickListener, List<GooglePlace> resultStores) {
-        this.onItemClickListener = onItemClickListener;
+    public ResultStoresAdapter(List<GooglePlace> resultStores, OnItemClickListener onItemClickListener) {
         this.resultStores = resultStores;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override

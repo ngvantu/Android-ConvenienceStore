@@ -56,6 +56,7 @@ import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.ListAdapter;
+import team25.conveniencestore.models.PlaceInfo;
 import team25.conveniencestore.models.Route;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -361,12 +362,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
                 rcvResultStores.setHasFixedSize(true);
 
-                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(new OnItemClickListener() {
+                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores, new OnItemClickListener() {
                     @Override
                     public void OnItemClick(int position) {
-                        Toast.makeText(getApplicationContext(), "Posotion" + position, Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
+                        i.putExtra("PLACE_ID", resultStores.get(position).getId());
+                        startActivity(i);
                     }
-                },resultStores);
+                });
                 rcvResultStores.setAdapter(rsAdapter);
                 rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
