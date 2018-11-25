@@ -5,17 +5,16 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context="team25.conveniencestore.MapsActivity">
 
         <LinearLayout
-            android:id="@+id/relLayout1"
+            android:id="@+id/layout1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
@@ -42,6 +41,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:ellipsize="end"
+                android:ems="10"
                 android:hint="Tìm kiếm cửa hàng"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
@@ -58,70 +58,31 @@
                 android:background="@drawable/ic_close" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/relLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_border"
-            android:elevation="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/ic_magnify2"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_magnify" />
-
-            <AutoCompleteTextView
-                android:id="@+id/etDestination"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@null"
-                android:ellipsize="end"
-                android:hint="Tìm tại địa điểm"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textColor="#000"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/btnDeleteInputSearchPlace"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_close" />
-        </LinearLayout>
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/white_border"
-            android:elevation="10dp">
+            android:elevation="10dp"
+            android:layout_below="@+id/layout1">
 
             <Button
                 android:id="@+id/btnFindPlace"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/white_border"
+                android:padding="5dp"
                 android:text="Tìm tại địa điểm"
-                android:textSize="12dp" />
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:layout_alignParentRight="true"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -137,13 +98,6 @@
                 android:layout_marginStart="8dp"
                 android:text="Find path"
                 android:visibility="gone" />
-
-            <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Search" />
-
         </LinearLayout>
 
         <fragment
@@ -151,7 +105,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingBTN"

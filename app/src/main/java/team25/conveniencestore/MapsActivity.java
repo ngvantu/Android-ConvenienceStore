@@ -74,7 +74,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
     private AutoCompleteTextView mSearchText;
-    private AutoCompleteTextView etDestination;
     private Marker marker;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
@@ -83,7 +82,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ProgressDialog progressDialog;
 
     private Button btnFindPlace;
-    private Button btnDeleteInputSearchPlace;
 
     private LinearLayout linearLayoutFindPlace;
     private GoogleApiClient googleApiClient;
@@ -174,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         checkPermissions();
     }
-
+    /*
     private void sendRequest() {
         String origin = mSearchText.getText().toString();
         String destination = etDestination.getText().toString();
@@ -193,7 +191,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
     }
-
+    */
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
         if (keyWord.isEmpty()) {
@@ -266,7 +264,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void mappingController() {
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
-        linearLayoutFindPlace = (LinearLayout) findViewById(R.id.relLayout2);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         btnSearch = (Button) findViewById(R.id.btnSearch);
@@ -276,10 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        btnDeleteInputSearchPlace = (Button) findViewById(R.id.btnDeleteInputSearchPlace);
-        etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
         floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
-
     }
 
     private void settingController() {
@@ -321,20 +315,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        final PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
-        etDestination.setAdapter(placeAutoCompleteAdapter);
-        etDestination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FindPlace findPlace = new FindPlace(mMap, etDestination.getText().toString());
-                try {
-                    findPlace.execute();
-                    pickingLocation = mMap.getCameraPosition().target;
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         btnFindPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,6 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Button btnFind = (Button) view.findViewById(R.id.dlg_FindPlace_btnFind);
                 Button btnClose = (Button) view.findViewById(R.id.dlg_FindPlace_btnClose);
 
+                PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(getApplicationContext(), googleApiClient, LAT_LNG_BOUNDS, null);
                 actvFindPlace.setAdapter(placeAutoCompleteAdapter);
 
                 imgbtnFindPlace.setOnClickListener(new View.OnClickListener() {
@@ -386,7 +367,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
             }
         });
-
+        /*
         btnFindPath.setEnabled(false);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,7 +375,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 sendRequest();
             }
         });
-
+        */
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -448,16 +429,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 mSearchText.setText("");
-            }
-        });
-
-        btnDeleteInputSearchPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etDestination.setText("");
-                pickingLocation = null;
-                linearLayoutFindPlace.setVisibility(View.GONE);
-                btnFindPlace.setVisibility(View.VISIBLE);
             }
         });
 
