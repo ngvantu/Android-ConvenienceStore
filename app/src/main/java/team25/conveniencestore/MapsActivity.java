@@ -1,6 +1,7 @@
 package team25.conveniencestore;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -20,10 +22,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,9 +70,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Button btnFindPath;
-    private Button btnSearch, btnSearchNearMe;
-    private Button btnResult, btnFeedback;
+    private Button btnSearch;
+    private FloatingActionButton btnSearchNearMe;
+    private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
+    private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
     private AutoCompleteTextView mSearchText;
     private AutoCompleteTextView etDestination;
     private Marker marker;
@@ -88,6 +95,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationListener locationListener;
     private Location currentLocation;
     private LatLng pickingLocation = null;
+
+    private boolean moveBack = false;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(8.1790665, 102.14441), new LatLng(23.393395, 114.3337595)
@@ -261,14 +270,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnSearchNearMe = (Button) findViewById(R.id.btnSearchNearMe);
-        btnResult = (Button) findViewById(R.id.btnResult);
-        btnFeedback = (Button) findViewById(R.id.btnFeedback);
+        btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
+        btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
+        btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         btnDeleteInputSearchPlace = (Button) findViewById(R.id.btnDeleteInputSearchPlace);
         etDestination = (AutoCompleteTextView) findViewById(R.id.etDestination);
+        floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
+
     }
 
     private void settingController() {
@@ -405,6 +416,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 btnFindPlace.setVisibility(View.VISIBLE);
             }
         });
+
+        floatingBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
+                if(moveBack==false)
+                {
+                    Show();
+                    moveBack=!moveBack;
+                }
+                else
+                {
+                    Hide();
+                    moveBack=!moveBack;
+                }
+                }
+
+        });
+
     }
 
     private void onServicesReady() {
@@ -477,6 +507,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
+    }
+
+    private void Show()
+    {
+        btnFeedback.show();
+        btnResult.show();
+        btnSearchNearMe.show();
+    }
+
+    private void Hide()
+    {
+        btnResult.hide();
+        btnSearchNearMe.hide();
+        btnFeedback.hide();
     }
 
     @Override
