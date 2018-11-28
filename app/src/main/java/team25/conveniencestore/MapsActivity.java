@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -51,6 +52,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
+    private Animation Move_Left, Back_Left,Move_Above, Back_Above, Move_Middle, Back_Middle;
     private AutoCompleteTextView mSearchText;
     private Marker marker;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -274,6 +277,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
+        Move_Left = AnimationUtils.loadAnimation(this,R.anim.move_left);
+        Back_Left = AnimationUtils.loadAnimation(this,R.anim.back_left);
+        Move_Above = AnimationUtils.loadAnimation(this,R.anim.move_above);
+        Back_Above = AnimationUtils.loadAnimation(this,R.anim.back_above);
+        Move_Middle = AnimationUtils.loadAnimation(this,R.anim.move_middle);
+        Back_Middle = AnimationUtils.loadAnimation(this,R.anim.back_middle);
     }
 
     private void settingController() {
@@ -435,7 +444,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
                 if(moveBack==false)
                 {
                     Show();
@@ -563,16 +571,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void Show()
     {
-        btnFeedback.show();
-        btnResult.show();
-        btnSearchNearMe.show();
+        btnFeedback.startAnimation(Move_Left);
+        btnResult.startAnimation(Move_Middle);
+        btnSearchNearMe.startAnimation(Move_Above);
     }
 
     private void Hide()
     {
-        btnResult.hide();
-        btnSearchNearMe.hide();
-        btnFeedback.hide();
+        btnResult.startAnimation(Back_Middle);
+        btnSearchNearMe.startAnimation(Back_Above);
+        btnFeedback.startAnimation(Back_Left);
     }
 
     @Override
