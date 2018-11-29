@@ -12,12 +12,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -57,6 +61,8 @@ import java.util.List;
 
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
+import team25.conveniencestore.fragment.AccountFragment;
+import team25.conveniencestore.fragment.FeedbackFragment;
 import team25.conveniencestore.models.DirectionFinder;
 import team25.conveniencestore.models.DirectionFinderListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -65,6 +71,8 @@ import team25.conveniencestore.models.Route;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         DirectionFinderListener, LocationListener {
+
+    private DrawerLayout drawerLayout;
 
     private GoogleMap mMap;
     private Button btnFindPath;
@@ -156,6 +164,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void Initalize() {
         setContentView(R.layout.activity_maps);
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -165,13 +176,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mappingController();
         settingController();
+
+
+
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkPermissions();
+
+
+        drawerLayout =  findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+
+
     }
+/*
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+*/
     /*
     private void sendRequest() {
         String origin = mSearchText.getText().toString();
@@ -273,7 +320,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
+       floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
     }
 
     private void settingController() {
@@ -436,17 +483,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
-                if(moveBack==false)
-                {
+                if (moveBack == false) {
                     Show();
-                    moveBack=!moveBack;
-                }
-                else
-                {
+                    moveBack = !moveBack;
+                } else {
                     Hide();
-                    moveBack=!moveBack;
+                    moveBack = !moveBack;
                 }
-                }
+            }
 
         });
 
@@ -561,15 +605,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void Show()
-    {
+    private void Show() {
         btnFeedback.show();
         btnResult.show();
         btnSearchNearMe.show();
     }
 
-    private void Hide()
-    {
+    private void Hide() {
         btnResult.hide();
         btnSearchNearMe.hide();
         btnFeedback.hide();
@@ -598,6 +640,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
+
     @Override
     public void onConnectionSuspended(int i) {
         googleApiClient.connect();

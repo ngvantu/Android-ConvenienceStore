@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="team25.conveniencestore.PlaceInfoActivity"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Launch"
+            android:orderInCategory="100"
+            android:title="@string/Launch"
+            app:showAsAction="never"
+
+            />
+        <item
+            android:id="@+id/Account"
+            android:orderInCategory="100"
+            android:title="@string/Account"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/Help"
+            android:orderInCategory="100"
+            android:title="@string/Help"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/Contact"
+            android:orderInCategory="100"
+            android:title="@string/Contact"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/Feedback"
+            android:orderInCategory="100"
+            android:title="@string/Feedback"
+            app:showAsAction="never" />
+    </group>
+</menu>
