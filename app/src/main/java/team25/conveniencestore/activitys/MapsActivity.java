@@ -251,6 +251,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         resultStores.addAll(results);
                         notifyChangedMapData(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         progressDialog.dismiss();
+                        showDialogResultStores();
                     }
                 });
                 placeNearbySearch.execute();
@@ -281,6 +282,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         resultStores.addAll(results);
                         notifyChangedMapData(pickingLocation);
                         progressDialog.dismiss();
+                        showDialogResultStores();
                     }
                 });
                 placeNearbySearch.execute();
@@ -361,6 +363,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showPickingLocation();
         showNearbyPlaces(pickingLocation);
         Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDialogResultStores() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
+        RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
+        rcvResultStores.setHasFixedSize(true);
+
+        ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores, new OnItemClickListener() {
+            @Override
+            public void OnItemClick(int position) {
+                Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
+                i.putExtra("PLACE_ID", resultStores.get(position).getId());
+                startActivity(i);
+            }
+        });
+        rcvResultStores.setAdapter(rsAdapter);
+        rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        mBuilder.setView(mView);
+        mBuilder.setCancelable(true);
+        AlertDialog alertDialog = mBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
     }
 
     /**
@@ -536,27 +562,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
-                RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
-                rcvResultStores.setHasFixedSize(true);
-
-                ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores, new OnItemClickListener() {
-                    @Override
-                    public void OnItemClick(int position) {
-                        Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
-                        i.putExtra("PLACE_ID", resultStores.get(position).getId());
-                        startActivity(i);
-                    }
-                });
-                rcvResultStores.setAdapter(rsAdapter);
-                rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-                mBuilder.setView(mView);
-                mBuilder.setCancelable(true);
-                AlertDialog alertDialog = mBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+                showDialogResultStores();
             }
         });
 
