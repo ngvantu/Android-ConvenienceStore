@@ -212,8 +212,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onSearchStoresSuccess() {
-                        mMap.clear();
-                        showNearbyPlaces(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),resultStores);
+                        notifyChangedMapData(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         progressDialog.dismiss();
                     }
                 });
@@ -242,8 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onSearchStoresSuccess() {
-                        mMap.clear();;
-                        showNearbyPlaces(pickingLocation, resultStores);
+                        notifyChangedMapData(pickingLocation);
                         progressDialog.dismiss();
                     }
                 });
@@ -256,10 +254,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void showNearbyPlaces(LatLng pickingLocation, List<GooglePlace> nearbyPlaceList) {
-        for (int i = 0; i < nearbyPlaceList.size(); i++) {
+    private void showNearbyPlaces(LatLng pickingLocation) {
+        for (int i = 0; i < resultStores.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
-            GooglePlace googlePlace = nearbyPlaceList.get(i);
+            GooglePlace googlePlace = resultStores.get(i);
 
             String placeName = googlePlace.getName();
             String vicinity = googlePlace.getVicinity();
@@ -267,6 +265,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String placeID = googlePlace.getId();
 
             if (!makeMarkerIconForStore(markerOptions, placeName)) {
+                resultStores.remove(i);
+                --i;
                 continue;
             }
 
@@ -308,6 +308,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return true;
     }
+
+    private void showPickingLocation() {
+        if (pickingLocation == null)
+            return;
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(pickingLocation);
+
+        mMap.addMarker(markerOptions);
+    }
+
+    private void notifyChangedMapData(LatLng pickingLocation) {
+        mMap.clear();
+        showPickingLocation();
+        showNearbyPlaces(pickingLocation);
+        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -336,6 +352,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                if (marker.getPosition() == pickingLocation)
+                    return;
                 Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", marker.getSnippet());
                 startActivity(i);
