@@ -1,7 +1,6 @@
-package team25.conveniencestore;
+package team25.conveniencestore.activitys;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,13 +19,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,15 +49,19 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import team25.conveniencestore.FindPlace;
+import team25.conveniencestore.PlaceNearbySearch;
+import team25.conveniencestore.R;
+import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
+import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
-import team25.conveniencestore.models.DirectionFinder;
-import team25.conveniencestore.models.DirectionFinderListener;
+import team25.conveniencestore.interfaces.DirectionFinderListener;
+import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
 
@@ -178,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /*
     private void sendRequest() {
         String origin = mSearchText.getText().toString();
-        String destination = etDestination.getText().toString();
+        String destination = mSearchText.getText().toString();
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -195,6 +196,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
     */
+
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
         if (keyWord.isEmpty()) {
@@ -202,7 +204,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         try {
             if (currentLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, resultStores);
+                placeNearbySearch = new PlaceNearbySearch(currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, resultStores, new SearchStoresListener() {
+                    @Override
+                    public void onSearchStoresStart() {
+                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần bạn!", true);
+                    }
+
+                    @Override
+                    public void onSearchStoresSuccess() {
+                        mMap.clear();
+                        showNearbyPlaces(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),resultStores);
+                        progressDialog.dismiss();
+                    }
+                });
                 placeNearbySearch.execute();
             } else {
                 Toast.makeText(getApplicationContext(), "Chưa tìm thấy GPS", Toast.LENGTH_SHORT).show();
@@ -220,7 +234,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             if (pickingLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(mMap, pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores);
+                placeNearbySearch = new PlaceNearbySearch(pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores, new SearchStoresListener() {
+                    @Override
+                    public void onSearchStoresStart() {
+                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần vị trí đã chọn", true);
+                    }
+
+                    @Override
+                    public void onSearchStoresSuccess() {
+                        mMap.clear();;
+                        showNearbyPlaces(pickingLocation, resultStores);
+                        progressDialog.dismiss();
+                    }
+                });
                 placeNearbySearch.execute();
             } else {
                 Toast.makeText(getApplicationContext(), "Chưa chọn địa điểm", Toast.LENGTH_SHORT).show();
@@ -230,6 +256,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void showNearbyPlaces(LatLng pickingLocation, List<GooglePlace> nearbyPlaceList) {
+        for (int i = 0; i < nearbyPlaceList.size(); i++) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            GooglePlace googlePlace = nearbyPlaceList.get(i);
+
+            String placeName = googlePlace.getName();
+            String vicinity = googlePlace.getVicinity();
+            LatLng latLng = googlePlace.getLatLng();
+            String placeID = googlePlace.getId();
+
+            if (!makeMarkerIconForStore(markerOptions, placeName)) {
+                continue;
+            }
+
+            markerOptions.position(latLng);
+            markerOptions.title(placeName + " : " + vicinity);
+            markerOptions.snippet(placeID);
+
+            mMap.addMarker(markerOptions);
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
+    }
+
+    boolean makeMarkerIconForStore(MarkerOptions markerOptions, String storeName)
+    {
+        if(storeName.toLowerCase().contains("family"))
+        {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
+        }
+        else if(storeName.toLowerCase().contains("circle"))
+        {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
+        }
+        else if(storeName.toLowerCase().contains("mini"))
+        {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
+        }
+        else if(storeName.toLowerCase().contains("b's"))
+        {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
+        }
+        else if(storeName.toLowerCase().contains("vinmart"))
+        {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
+        }
+        else
+        {
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            return false;
+        }
+        return true;
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -327,8 +405,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //btnFindPlace.setVisibility(View.GONE);
-                //linearLayoutFindPlace.setVisibility(View.VISIBLE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
                 View view = getLayoutInflater().inflate(R.layout.dialog_findplace, null);
                 builder.setView(view);
@@ -444,15 +520,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(moveBack==false)
-                {
+                if(!moveBack) {
                     Show();
-                    moveBack=!moveBack;
-                }
-                else
-                {
+                    moveBack =! moveBack;
+                } else {
                     Hide();
-                    moveBack=!moveBack;
+                    moveBack =! moveBack;
                 }
                 }
 

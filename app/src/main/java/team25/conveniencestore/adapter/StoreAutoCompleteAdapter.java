@@ -1,6 +1,7 @@
-package team25.conveniencestore;
+package team25.conveniencestore.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import team25.conveniencestore.R;
 import team25.conveniencestore.models.StoreItemAutoComplete;
 
 public class StoreAutoCompleteAdapter extends ArrayAdapter<StoreItemAutoComplete> {
@@ -27,7 +29,7 @@ public class StoreAutoCompleteAdapter extends ArrayAdapter<StoreItemAutoComplete
 
     private void filterStoreList() {
         storeListFull = new ArrayList<>();
-
+        storeListFull.add(new StoreItemAutoComplete("Tất cả", Color.TRANSPARENT));
         storeListFull.add(new StoreItemAutoComplete("B's Mart", R.drawable.logo_store_bsmart));
         storeListFull.add(new StoreItemAutoComplete("Circle K", R.drawable.logo_store_circlek));
         storeListFull.add(new StoreItemAutoComplete("Family Mart", R.drawable.logo_store_familymart));

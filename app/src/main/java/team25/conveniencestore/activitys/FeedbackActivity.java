@@ -1,4 +1,4 @@
-package team25.conveniencestore;
+package team25.conveniencestore.activitys;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.List;
+
+import team25.conveniencestore.R;
 
 public class FeedbackActivity extends Activity {
 
