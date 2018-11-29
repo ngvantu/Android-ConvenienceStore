@@ -9,13 +9,12 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,19 +59,12 @@ import java.util.List;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
-import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
-<<<<<<< HEAD:app/src/main/java/team25/conveniencestore/MapsActivity.java
-import team25.conveniencestore.fragment.AccountFragment;
-import team25.conveniencestore.fragment.FeedbackFragment;
-import team25.conveniencestore.models.DirectionFinder;
-import team25.conveniencestore.models.DirectionFinderListener;
-=======
+import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
->>>>>>> 069d939e26def3bb2a0bb296285bc6d2b60d198f:app/src/main/java/team25/conveniencestore/activitys/MapsActivity.java
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
 
@@ -173,9 +165,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void Initalize() {
         setContentView(R.layout.activity_maps);
-
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -185,18 +174,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mappingController();
         settingController();
-
-
-
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkPermissions();
-
 
         drawerLayout =  findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -256,14 +239,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         try {
             if (currentLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, resultStores, new SearchStoresListener() {
+                placeNearbySearch = new PlaceNearbySearch(currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần bạn!", true);
                     }
 
                     @Override
-                    public void onSearchStoresSuccess() {
+                    public void onSearchStoresSuccess(List<GooglePlace> results) {
+                        resultStores.clear();
+                        resultStores.addAll(results);
                         notifyChangedMapData(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         progressDialog.dismiss();
                     }
@@ -285,14 +270,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             if (pickingLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(pickingLocation.latitude, pickingLocation.longitude, keyWord, resultStores, new SearchStoresListener() {
+                placeNearbySearch = new PlaceNearbySearch(pickingLocation.latitude, pickingLocation.longitude, keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần vị trí đã chọn", true);
                     }
 
                     @Override
-                    public void onSearchStoresSuccess() {
+                    public void onSearchStoresSuccess(List<GooglePlace> results) {
+                        resultStores.addAll(results);
                         notifyChangedMapData(pickingLocation);
                         progressDialog.dismiss();
                     }
@@ -376,6 +362,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showNearbyPlaces(pickingLocation);
         Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -424,9 +411,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-<<<<<<< HEAD:app/src/main/java/team25/conveniencestore/MapsActivity.java
-       floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
-=======
+        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
         floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
         Move_Left = AnimationUtils.loadAnimation(this,R.anim.move_left);
         Back_Left = AnimationUtils.loadAnimation(this,R.anim.back_left);
@@ -434,7 +419,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Back_Above = AnimationUtils.loadAnimation(this,R.anim.back_above);
         Move_Middle = AnimationUtils.loadAnimation(this,R.anim.move_middle);
         Back_Middle = AnimationUtils.loadAnimation(this,R.anim.back_middle);
->>>>>>> 069d939e26def3bb2a0bb296285bc6d2b60d198f:app/src/main/java/team25/conveniencestore/activitys/MapsActivity.java
     }
 
     private void settingController() {
@@ -594,23 +578,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD:app/src/main/java/team25/conveniencestore/MapsActivity.java
                 Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
-                if (moveBack == false) {
-                    Show();
-                    moveBack = !moveBack;
-                } else {
-                    Hide();
-                    moveBack = !moveBack;
-=======
                 if(!moveBack) {
                     Show();
-                    moveBack =! moveBack;
+                    moveBack = !moveBack;
                 } else {
                     Hide();
-                    moveBack =! moveBack;
-                }
->>>>>>> 069d939e26def3bb2a0bb296285bc6d2b60d198f:app/src/main/java/team25/conveniencestore/activitys/MapsActivity.java
+                    moveBack = !moveBack;
                 }
             }
 
@@ -727,31 +701,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-<<<<<<< HEAD:app/src/main/java/team25/conveniencestore/MapsActivity.java
     private void Show() {
-        btnFeedback.show();
-        btnResult.show();
-        btnSearchNearMe.show();
-    }
-
-    private void Hide() {
-        btnResult.hide();
-        btnSearchNearMe.hide();
-        btnFeedback.hide();
-=======
-    private void Show()
-    {
         btnFeedback.startAnimation(Move_Left);
         btnResult.startAnimation(Move_Middle);
         btnSearchNearMe.startAnimation(Move_Above);
     }
 
-    private void Hide()
-    {
+    private void Hide() {
         btnResult.startAnimation(Back_Middle);
         btnSearchNearMe.startAnimation(Back_Above);
         btnFeedback.startAnimation(Back_Left);
->>>>>>> 069d939e26def3bb2a0bb296285bc6d2b60d198f:app/src/main/java/team25/conveniencestore/activitys/MapsActivity.java
     }
 
     @Override

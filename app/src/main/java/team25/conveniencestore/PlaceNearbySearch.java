@@ -35,14 +35,12 @@ public class PlaceNearbySearch {
     private static final int PROXIMITY_RADIUS = 500;
     private double latitude, longtitude;
     private String keyWord;
-    private List<GooglePlace> resultStores;
     private SearchStoresListener searchStoresListener;
 
-     public PlaceNearbySearch(double latitude, double longtitude, String keyWord, List<GooglePlace> resultStores, SearchStoresListener searchStoresListener){
+     public PlaceNearbySearch(double latitude, double longtitude, String keyWord, SearchStoresListener searchStoresListener){
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.keyWord = (keyWord == "Tất cả")? DEFAULT_KEYWORD : keyWord;
-        this.resultStores = resultStores;
         this.searchStoresListener = searchStoresListener;
     }
 
@@ -101,13 +99,8 @@ public class PlaceNearbySearch {
 
         @Override
         protected void onPostExecute(String jsonString) {
-            //List<GooglePlace> nearbyPlaceList;
             PlaceParser placeParser = new PlaceParser();
-            //nearbyPlaceList = placeParser.parseJson(jsonString);
-            //showNearbyPlaces(nearbyPlaceList);
-            resultStores.clear();
-            resultStores.addAll(placeParser.parseJson(jsonString));
-            searchStoresListener.onSearchStoresSuccess();
+            searchStoresListener.onSearchStoresSuccess(placeParser.parseJson(jsonString));
         }
 
     }
