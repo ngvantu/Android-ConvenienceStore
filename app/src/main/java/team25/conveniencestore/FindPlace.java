@@ -28,7 +28,7 @@ public class FindPlace {
     private String keyWord;
     private GoogleMap mMap;
 
-    FindPlace(GoogleMap mMap, String keyWord){
+    public FindPlace(GoogleMap mMap, String keyWord){
         this.mMap = mMap;
         this.keyWord = keyWord;
     }

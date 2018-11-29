@@ -1,4 +1,4 @@
-package team25.conveniencestore;
+package team25.conveniencestore.adapter;
 
 /*
  * Copyright (C) 2015 Google Inc. All Rights Reserved.

@@ -1,4 +1,4 @@
-package team25.conveniencestore;
+package team25.conveniencestore.activitys;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import team25.conveniencestore.R;
 import team25.conveniencestore.fragments.PlaceInfoTab1;
 import team25.conveniencestore.fragments.PlaceInfoTab2;
 import team25.conveniencestore.fragments.PlaceInfoTab3;
