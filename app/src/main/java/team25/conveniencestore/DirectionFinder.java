@@ -1,4 +1,4 @@
-package team25.conveniencestore.models;
+package team25.conveniencestore;
 
 import android.os.AsyncTask;
 
@@ -19,7 +19,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import team25.conveniencestore.R;
+import team25.conveniencestore.interfaces.DirectionFinderListener;
+import team25.conveniencestore.models.Distance;
+import team25.conveniencestore.models.Duration;
+import team25.conveniencestore.models.Route;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";

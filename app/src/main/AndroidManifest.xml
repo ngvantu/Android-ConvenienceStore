@@ -36,7 +36,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activitys.MapsActivity"
             android:label="@string/title_activity_maps"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
@@ -46,10 +46,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FeedbackActivity"
+            android:name=".activitys.FeedbackActivity"
             android:label="@string/title_activity_feedback" />
         <activity
-            android:name=".PlaceInfoActivity"
+            android:name=".activitys.PlaceInfoActivity"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

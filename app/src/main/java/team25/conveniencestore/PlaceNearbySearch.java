@@ -1,5 +1,6 @@
 package team25.conveniencestore;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 
@@ -22,6 +23,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 
 public class PlaceNearbySearch {
@@ -33,20 +35,19 @@ public class PlaceNearbySearch {
     private static final int PROXIMITY_RADIUS = 500;
     private double latitude, longtitude;
     private String keyWord;
-    private GoogleMap mMap;
-    private List<GooglePlace> resultStore;
+    private SearchStoresListener searchStoresListener;
 
-    PlaceNearbySearch(GoogleMap mMap, double latitude, double longtitude, String keyWord, List<GooglePlace> resultStore){
-        this.mMap = mMap;
+     public PlaceNearbySearch(double latitude, double longtitude, String keyWord, SearchStoresListener searchStoresListener){
         this.latitude = latitude;
         this.longtitude = longtitude;
-        this.keyWord = keyWord;
-        this.resultStore = resultStore;
+        this.keyWord = (keyWord == "Tất cả")? DEFAULT_KEYWORD : keyWord;
+        this.searchStoresListener = searchStoresListener;
     }
 
     public void execute() throws UnsupportedEncodingException {
         String url = createURL();
-        new DownloadRawData().execute(mMap, url);
+        searchStoresListener.onSearchStoresStart();
+        new DownloadRawData().execute(url);
     }
 
     private String createURL() throws UnsupportedEncodingException {
@@ -72,12 +73,9 @@ public class PlaceNearbySearch {
 
     private class DownloadRawData extends AsyncTask<Object, String, String> {
 
-        private GoogleMap mMap;
-
         @Override
         protected String doInBackground(Object... objects) {
-            mMap = (GoogleMap) objects[0];
-            String link = (String) objects[1];
+            String link = (String) objects[0];
 
             try {
                 URL url = new URL(link);
@@ -101,62 +99,9 @@ public class PlaceNearbySearch {
 
         @Override
         protected void onPostExecute(String jsonString) {
-            List<GooglePlace> nearbyPlaceList;
             PlaceParser placeParser = new PlaceParser();
-            nearbyPlaceList = placeParser.parseJson(jsonString);
-            showNearbyPlaces(nearbyPlaceList);
+            searchStoresListener.onSearchStoresSuccess(placeParser.parseJson(jsonString));
         }
 
-        private void showNearbyPlaces(List<GooglePlace> nearbyPlaceList) {
-            mMap.clear();
-            resultStore.clear();
-            resultStore.addAll(nearbyPlaceList);
-            for (int i = 0; i < nearbyPlaceList.size(); i++) {
-                MarkerOptions markerOptions = new MarkerOptions();
-                GooglePlace googlePlace = nearbyPlaceList.get(i);
-
-                String placeName = googlePlace.getName();
-                String vicinity = googlePlace.getVicinity();
-                LatLng latLng = googlePlace.getLatLng();
-                String placeID = googlePlace.getId();
-
-                markerOptions.position(latLng);
-                markerOptions.title(placeName + " : " + vicinity);
-                markerOptions.snippet(placeID);
-
-                makeMarkerIconForStore(markerOptions, placeName);
-
-                mMap.addMarker(markerOptions);
-            }
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longtitude), 15f));
-        }
-
-        void makeMarkerIconForStore(MarkerOptions markerOptions, String storeName)
-        {
-            if(storeName.toLowerCase().contains("family"))
-            {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
-            }
-            else if(storeName.toLowerCase().contains("circle"))
-            {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
-            }
-            else if(storeName.toLowerCase().contains("mini"))
-            {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
-            }
-            else if(storeName.toLowerCase().contains("b's"))
-            {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
-            }
-            else if(storeName.toLowerCase().contains("vinmart"))
-            {
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
-            }
-            else
-            {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            }
-        }
     }
 }
