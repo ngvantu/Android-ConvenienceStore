@@ -119,6 +119,8 @@ public class PlaceInfoActivity extends AppCompatActivity {
 
             bundle.putString("REVIEWS", jsonStringReviews);
 
+            bundle.putDouble("RATING", jsonRes.getDouble("rating"));
+
             tab1.setArguments(bundle);
             tab2.setArguments(bundle);
 
