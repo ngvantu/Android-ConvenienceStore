@@ -281,6 +281,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onSearchStoresSuccess(List<GooglePlace> results) {
+                        resultStores.clear();
                         resultStores.addAll(results);
                         notifyChangedMapData(pickingLocation);
                         progressDialog.dismiss();
@@ -352,10 +353,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         showPickingLocation();
         showNearbyPlaces(pickingLocation);
-        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
     }
 
     private void showDialogResultStores() {
+        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
+        if (resultStores.isEmpty()) {
+            return;
+        }
+
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
         RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
