@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DirectionFinderListener, LocationListener {
 
     private DrawerLayout drawerLayout;
-
+    public static Resources resources;
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch;
@@ -239,7 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         try {
             if (currentLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, new SearchStoresListener() {
+                placeNearbySearch = new PlaceNearbySearch(this, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần bạn!", true);
@@ -271,7 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             if (pickingLocation != null) {
-                placeNearbySearch = new PlaceNearbySearch(pickingLocation.latitude, pickingLocation.longitude, keyWord, new SearchStoresListener() {
+                placeNearbySearch = new PlaceNearbySearch(this, pickingLocation.latitude, pickingLocation.longitude, keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần vị trí đã chọn", true);
@@ -376,7 +378,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
     }
-    String a = getResources().getString(R.string.google_maps_key);
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -506,7 +508,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        FindPlace findPlace = new FindPlace(mMap, input);
+                        FindPlace findPlace = new FindPlace(getApplicationContext() ,mMap, input);
                         try {
                             findPlace.execute();
                             pickingLocation = mMap.getCameraPosition().target;

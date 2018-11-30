@@ -1,5 +1,6 @@
 package team25.conveniencestore;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -24,11 +25,13 @@ import java.net.URLEncoder;
 public class FindPlace {
 
     private static final String URL_API = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=";
-    private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
+    //private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
     private String keyWord;
     private GoogleMap mMap;
+    private Context context;
 
-    public FindPlace(GoogleMap mMap, String keyWord){
+    public FindPlace(Context context, GoogleMap mMap, String keyWord){
+        this.context = context;
         this.mMap = mMap;
         this.keyWord = keyWord;
     }
@@ -37,7 +40,7 @@ public class FindPlace {
         String urlKeyWord = URLEncoder.encode(keyWord, "utf-8");
         return URL_API + urlKeyWord
                 + "&inputtype=textquery&fields=formatted_address,name,geometry&key="
-                + GOOGLE_API_KEY;
+                + context.getResources().getString(R.string.find_place_api_key);
     }
 
     public void execute() throws UnsupportedEncodingException {

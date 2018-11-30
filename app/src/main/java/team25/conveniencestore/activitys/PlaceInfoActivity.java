@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.firebase.ui.auth.data.model.Resource;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +33,8 @@ public class PlaceInfoActivity extends AppCompatActivity {
     private static final String TAG = "PlaceInfoActivity";
     private ViewPager mViewPager;
 
-    String API_KEY = Resources.getSystem().getString(R.string.place_info_api_key);
+    String API_KEY = "AIzaSyDVFmBKLQHSndjqgqRfU_7JpWS-imp2n40";
+
     String placeID;
 
     @Override
@@ -107,6 +109,7 @@ public class PlaceInfoActivity extends AppCompatActivity {
 
         if (jsonRes.get("status").toString().equalsIgnoreCase("OK")) {
             jsonRes = jsonRes.getJSONObject("result");
+            String jsonStringReviews = jsonRes.getJSONArray("reviews").toString();
 
             Fragment tab1 = new PlaceInfoTab1();
             Fragment tab2 = new PlaceInfoTab2();
@@ -116,7 +119,12 @@ public class PlaceInfoActivity extends AppCompatActivity {
             bundle.putString("STORE_ADDRESS", jsonRes.get("formatted_address").toString());
             bundle.putString("STORE_PHONE", jsonRes.get("formatted_phone_number").toString());
 
+            bundle.putString("REVIEWS", jsonStringReviews);
+
+            bundle.putDouble("RATING", jsonRes.getDouble("rating"));
+
             tab1.setArguments(bundle);
+            tab2.setArguments(bundle);
 
             adapter.addFragment(tab1, "Tổng quan");
             adapter.addFragment(tab2, "Dữ liệu Google");

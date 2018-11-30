@@ -24,4 +24,5 @@
     <string name="direction_api_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmuL74e10P-d4qseJYL_V6wfVTtbqBTMc</string>
     <string name="places_api_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD71488hLolBKUNwvTO4AOh4b_XwgeJSS4</string>
     <string name="place_info_api_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDVFmBKLQHSndjqgqRfU_7JpWS-imp2n40</string>
+    <string name="find_place_api_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCK1MVTH9DFM4yT6cWmDZdQwhuuTSqG_jg</string>
 </resources>

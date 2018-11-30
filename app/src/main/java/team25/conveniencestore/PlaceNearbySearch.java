@@ -1,18 +1,7 @@
 package team25.conveniencestore;
 
-import android.app.ProgressDialog;
-import android.content.res.Resources;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-
-import com.firebase.ui.auth.data.model.Resource;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,27 +11,26 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import team25.conveniencestore.interfaces.SearchStoresListener;
-import team25.conveniencestore.models.GooglePlace;
 
 public class PlaceNearbySearch {
 
     private static final String NEARBY_SEARCH_PLACE_URL_API = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-    private static final String GOOGLE_API_KEY = Resources.getSystem().getString(R.string.places_api_key);
+    //private static String GOOGLE_API_KEY = resources
     private static final String TYPE_NEARBY_PLACE = "convenience_store";
     private static final String DEFAULT_KEYWORD = "cửa hàng tiện lợi";
     private static final int PROXIMITY_RADIUS = 500;
     private double latitude, longtitude;
     private String keyWord;
     private SearchStoresListener searchStoresListener;
+    private Context context;
 
-     public PlaceNearbySearch(double latitude, double longtitude, String keyWord, SearchStoresListener searchStoresListener){
+    public PlaceNearbySearch(Context context, double latitude, double longtitude, String keyWord, SearchStoresListener searchStoresListener){
+        this.context = context;
         this.latitude = latitude;
         this.longtitude = longtitude;
-        this.keyWord = (keyWord == "Tất cả")? DEFAULT_KEYWORD : keyWord;
+        this.keyWord = (keyWord.equals("Tất cả"))? DEFAULT_KEYWORD : keyWord;
         this.searchStoresListener = searchStoresListener;
     }
 
@@ -70,7 +58,7 @@ public class PlaceNearbySearch {
                 + "&rankby=distance"
                 + "&type=" + TYPE_NEARBY_PLACE
                 + "&keyword=" + urlKeyWord
-                + "&key=" +GOOGLE_API_KEY;
+                + "&key=" + context.getResources().getString(R.string.places_api_key);
     }
 
     private class DownloadRawData extends AsyncTask<Object, String, String> {

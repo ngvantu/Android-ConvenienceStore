@@ -1,9 +1,8 @@
 package team25.conveniencestore;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.os.AsyncTask;
 
-import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -28,12 +27,14 @@ import team25.conveniencestore.models.Route;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = Resources.getSystem().getString(R.string.direction_api_key);
+    private static final String GOOGLE_API_KEY = "AIzaSyBmuL74e10P-d4qseJYL_V6wfVTtbqBTMc";
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
+    private Context context;
 
-    public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
+    public DirectionFinder(Context context, DirectionFinderListener listener, String origin, String destination) {
+        this.context = context;
         this.listener = listener;
         this.origin = origin;
         this.destination = destination;
@@ -48,7 +49,9 @@ public class DirectionFinder {
         String urlOrigin = URLEncoder.encode(origin, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
 
-        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
+        return DIRECTION_URL_API
+                + "origin=" + urlOrigin + "&destination=" + urlDestination
+                + "&key=" + context.getResources().getString(R.string.direction_api_key);
     }
 
     private class DownloadRawData extends AsyncTask<String, Void, String> {
