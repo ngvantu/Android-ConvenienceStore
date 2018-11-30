@@ -8,7 +8,8 @@
 - Find Place API
 - Search near by - Place API
 - Direction API
-- RecyclerView 
+- RecyclerView
+- RingProgressBar (alt library) 
 ## Tiến
 
 ## Nghĩa
