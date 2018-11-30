@@ -1,9 +1,11 @@
 package team25.conveniencestore;
 
 import android.app.ProgressDialog;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 
+import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -29,7 +31,7 @@ import team25.conveniencestore.models.GooglePlace;
 public class PlaceNearbySearch {
 
     private static final String NEARBY_SEARCH_PLACE_URL_API = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
+    private static final String GOOGLE_API_KEY = Resources.getSystem().getString(R.string.places_api_key);
     private static final String TYPE_NEARBY_PLACE = "convenience_store";
     private static final String DEFAULT_KEYWORD = "cửa hàng tiện lợi";
     private static final int PROXIMITY_RADIUS = 500;

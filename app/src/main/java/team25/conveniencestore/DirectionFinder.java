@@ -1,7 +1,9 @@
 package team25.conveniencestore;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
 
+import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -26,7 +28,7 @@ import team25.conveniencestore.models.Route;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
+    private static final String GOOGLE_API_KEY = Resources.getSystem().getString(R.string.direction_api_key);
     private DirectionFinderListener listener;
     private String origin;
     private String destination;

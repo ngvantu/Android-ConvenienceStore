@@ -319,30 +319,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
     }
 
-    boolean makeMarkerIconForStore(MarkerOptions markerOptions, String storeName)
-    {
-        if(storeName.toLowerCase().contains("family"))
-        {
+    boolean makeMarkerIconForStore(MarkerOptions markerOptions, String storeName) {
+        if(storeName.toLowerCase().contains("family")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
-        }
-        else if(storeName.toLowerCase().contains("circle"))
-        {
+        } else if(storeName.toLowerCase().contains("circle")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
-        }
-        else if(storeName.toLowerCase().contains("mini"))
-        {
+        } else if(storeName.toLowerCase().contains("mini")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
-        }
-        else if(storeName.toLowerCase().contains("b's"))
-        {
+        } else if(storeName.toLowerCase().contains("b's")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
-        }
-        else if(storeName.toLowerCase().contains("vinmart"))
-        {
+        } else if(storeName.toLowerCase().contains("vinmart")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
-        }
-        else
-        {
+        } else {
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             return false;
         }
@@ -388,7 +376,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
     }
-
+    String a = getResources().getString(R.string.google_maps_key);
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.

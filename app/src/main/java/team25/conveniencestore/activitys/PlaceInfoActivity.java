@@ -1,5 +1,6 @@
 package team25.conveniencestore.activitys;
 
+import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.firebase.ui.auth.data.model.Resource;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +32,7 @@ public class PlaceInfoActivity extends AppCompatActivity {
     private static final String TAG = "PlaceInfoActivity";
     private ViewPager mViewPager;
 
-    String API_KEY = "AIzaSyCB0faLt9sjgmFeAv4MeLQUE3yKovTMWjw";
+    String API_KEY = Resources.getSystem().getString(R.string.place_info_api_key);
     String placeID;
 
     @Override

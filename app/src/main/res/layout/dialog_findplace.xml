@@ -59,7 +59,8 @@
             android:text="TÌM NGAY"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/white_border"/>
         <Button
             android:id="@+id/dlg_FindPlace_btnClose"
             android:layout_width="0dp"
@@ -68,6 +69,7 @@
             android:text="ĐÓNG"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/white_border"/>
     </LinearLayout>
 </LinearLayout>
