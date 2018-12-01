@@ -1,4 +1,4 @@
-package team25.conveniencestore.fragments;
+package team25.conveniencestore.placeinfo_fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

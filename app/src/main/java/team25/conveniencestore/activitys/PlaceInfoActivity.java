@@ -1,13 +1,11 @@
 package team25.conveniencestore.activitys;
 
-import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,18 +13,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.firebase.ui.auth.data.model.Resource;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import team25.conveniencestore.R;
-import team25.conveniencestore.fragments.PlaceInfoTab1;
-import team25.conveniencestore.fragments.PlaceInfoTab2;
-import team25.conveniencestore.fragments.PlaceInfoTab3;
-import team25.conveniencestore.fragments.PlaceInfoTabError;
-import team25.conveniencestore.fragments.SectionsPageAdapter;
+import team25.conveniencestore.placeinfo_fragments.PlaceInfoTab1;
+import team25.conveniencestore.placeinfo_fragments.PlaceInfoTab2;
+import team25.conveniencestore.placeinfo_fragments.PlaceInfoTab3;
+import team25.conveniencestore.placeinfo_fragments.PlaceInfoTabError;
+import team25.conveniencestore.placeinfo_fragments.SectionsPageAdapter;
 
 public class PlaceInfoActivity extends AppCompatActivity {
 
