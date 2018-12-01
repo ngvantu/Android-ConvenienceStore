@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import team25.conveniencestore.R;
+import team25.conveniencestore.placeinfo_fragments.SectionsPageAdapter;
 
 public class DialogResultStores extends DialogFragment{
 

@@ -24,6 +24,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,9 +73,9 @@ import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragments.DialogResultStores;
-import team25.conveniencestore.fragments.PlaceInfoTab1;
+//import team25.conveniencestore.fragments.PlaceInfoTab1;
 import team25.conveniencestore.fragments.ResultStoresFragment;
-import team25.conveniencestore.fragments.SectionsPageAdapter;
+//import team25.conveniencestore.fragments.SectionsPageAdapter;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -121,60 +122,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest locationRequest;
     private static final long UPDATE_INTERNAL = 5000, FASTEST_INTERNAL = 5000; // 5 seconds
 
-    /**
-     * permissions request code
-     */
-    private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
-
-    /**
-     * Permissions that need to be explicitly requested from end user.
-     */
-    private static final String[] REQUIRED_SDK_PERMISSIONS = new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-    };
-
-    protected void checkPermissions() {
-        final List<String> missingPermissions = new ArrayList<String>();
-        // check all required dynamic permissions
-        for (final String permission : REQUIRED_SDK_PERMISSIONS) {
-            final int result = ContextCompat.checkSelfPermission(this, permission);
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                missingPermissions.add(permission);
-            }
-        }
-        if (!missingPermissions.isEmpty()) {
-            // request all missing permissions
-            final String[] permissions = missingPermissions
-                    .toArray(new String[missingPermissions.size()]);
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_ASK_PERMISSIONS);
-        } else {
-            final int[] grantResults = new int[REQUIRED_SDK_PERMISSIONS.length];
-            Arrays.fill(grantResults, PackageManager.PERMISSION_GRANTED);
-            onRequestPermissionsResult(REQUEST_CODE_ASK_PERMISSIONS, REQUIRED_SDK_PERMISSIONS,
-                    grantResults);
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                for (int index = permissions.length - 1; index >= 0; --index) {
-                    if (grantResults[index] != PackageManager.PERMISSION_GRANTED) {
-                        // exit the app if one permission is not granted
-                        Toast.makeText(this, "Required permission '" + permissions[index]
-                                + "' not granted, exiting", Toast.LENGTH_LONG).show();
-                        finish();
-                        return;
-                    }
-                }
-                // all permissions were granted
-                Initalize();
-                break;
-        }
-    }
-
     protected void Initalize() {
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -191,8 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermissions();
-
+        Initalize();
         drawerLayout =  findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -390,19 +336,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng hcmus = new LatLng(10.762683, 106.682108);
-        //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -715,8 +650,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-
         startLocationUpdates();
+
+        if(currentLocation != null)
+        {
+            LatLng latLngCurrent = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngCurrent, 15f));
+        }
     }
 
     private void startLocationUpdates() {
