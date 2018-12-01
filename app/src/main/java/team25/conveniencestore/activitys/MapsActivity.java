@@ -9,13 +9,18 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +71,10 @@ import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
+import team25.conveniencestore.fragments.DialogResultStores;
+import team25.conveniencestore.fragments.PlaceInfoTab1;
+import team25.conveniencestore.fragments.ResultStoresFragment;
+import team25.conveniencestore.fragments.SectionsPageAdapter;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -357,31 +367,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void showDialogResultStores() {
         Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
+        /*
         if (resultStores.isEmpty()) {
             return;
-        }
-
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MapsActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.dialog_result_stores, null);
-        RecyclerView rcvResultStores = (RecyclerView) mView.findViewById(R.id.rcv_result_stores);
-        rcvResultStores.setHasFixedSize(true);
-
-        ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores, new OnItemClickListener() {
-            @Override
-            public void OnItemClick(int position) {
-                Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
-                i.putExtra("PLACE_ID", resultStores.get(position).getId());
-                startActivity(i);
-            }
-        });
-        rcvResultStores.setAdapter(rsAdapter);
-        rcvResultStores.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-        mBuilder.setView(mView);
-        mBuilder.setCancelable(true);
-        AlertDialog alertDialog = mBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+        }*/
+        DialogResultStores dialogResultStores = new DialogResultStores();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
+        dialogResultStores.setArguments(bundle);
+        dialogResultStores.show(getSupportFragmentManager(), "DialogResultStores");
     }
 
     /**

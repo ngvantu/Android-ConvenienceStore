@@ -1,8 +1,11 @@
 package team25.conveniencestore.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
-public class GooglePlace {
+public class GooglePlace implements Parcelable{
     private String id;
     private String name;
     private String vicinity;
@@ -16,6 +19,26 @@ public class GooglePlace {
         this.latLng = latLng;
         this.rating = rating;
     }
+
+    protected GooglePlace(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        vicinity = in.readString();
+        latLng = in.readParcelable(LatLng.class.getClassLoader());
+        rating = in.readDouble();
+    }
+
+    public static final Creator<GooglePlace> CREATOR = new Creator<GooglePlace>() {
+        @Override
+        public GooglePlace createFromParcel(Parcel in) {
+            return new GooglePlace(in);
+        }
+
+        @Override
+        public GooglePlace[] newArray(int size) {
+            return new GooglePlace[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -55,5 +78,19 @@ public class GooglePlace {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(vicinity);
+        dest.writeParcelable(latLng, flags);
+        dest.writeDouble(rating);
     }
 }

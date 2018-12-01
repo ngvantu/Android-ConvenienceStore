@@ -27,4 +27,7 @@
     <string name="Help">Help</string>
     <string name="Contact">Contact</string>
     <string name="Feedback">Feedback</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
