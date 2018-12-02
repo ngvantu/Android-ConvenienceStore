@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -71,7 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DirectionFinderListener, LocationListener {
 
     private DrawerLayout drawerLayout;
-    public static Resources resources;
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch;
@@ -351,13 +349,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
-        floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
-        Move_Left = AnimationUtils.loadAnimation(this,R.anim.move_left);
-        Back_Left = AnimationUtils.loadAnimation(this,R.anim.back_left);
-        Move_Above = AnimationUtils.loadAnimation(this,R.anim.move_above);
-        Back_Above = AnimationUtils.loadAnimation(this,R.anim.back_above);
-        Move_Middle = AnimationUtils.loadAnimation(this,R.anim.move_middle);
-        Back_Middle = AnimationUtils.loadAnimation(this,R.anim.back_middle);
+        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
+        Move_Left = AnimationUtils.loadAnimation(this, R.anim.move_left);
+        Back_Left = AnimationUtils.loadAnimation(this, R.anim.back_left);
+        Move_Above = AnimationUtils.loadAnimation(this, R.anim.move_above);
+        Back_Above = AnimationUtils.loadAnimation(this, R.anim.back_above);
+        Move_Middle = AnimationUtils.loadAnimation(this, R.anim.move_middle);
+        Back_Middle = AnimationUtils.loadAnimation(this, R.anim.back_middle);
     }
 
     private void settingController() {
@@ -431,7 +429,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        FindPlace findPlace = new FindPlace(getApplicationContext() ,mMap, input);
+                        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input);
                         try {
                             findPlace.execute();
                             pickingLocation = mMap.getCameraPosition().target;
@@ -498,7 +496,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
-                if(!moveBack) {
+                if (!moveBack) {
                     Show();
                     moveBack = !moveBack;
                 } else {
@@ -641,11 +639,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         startLocationUpdates();
 
-        if(currentLocation != null)
-        {
+        if (currentLocation != null) {
             LatLng latLngCurrent = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngCurrent, 15f));
+        } else {
+            LatLng hcmus = new LatLng(10.762683, 106.682108);
+            //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
         }
     }
 
