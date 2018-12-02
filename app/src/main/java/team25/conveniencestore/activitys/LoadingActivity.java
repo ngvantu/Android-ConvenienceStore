@@ -2,15 +2,20 @@ package team25.conveniencestore.activitys;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,6 +24,10 @@ import java.util.List;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.FavoritePlaces;
+import team25.conveniencestore.SqlProvider.FavoritePlacesRepository;
+import team25.conveniencestore.SqlProvider.FavoritePlacesViewModel;
+import team25.conveniencestore.models.GooglePlace;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -67,12 +76,16 @@ public class LoadingActivity extends AppCompatActivity {
                 }
                 // all permissions were granted
                 Intent i = new Intent(LoadingActivity.this, MapsActivity.class);
+                i.putParcelableArrayListExtra("favoriteList", (ArrayList<? extends Parcelable>) listFavorite);
                 finish();
                 startActivity(i);
                 break;
         }
     }
 
+    private FavoritePlacesViewModel mViewModel;
+    private List<FavoritePlaces> listFavorite = new ArrayList<>();
+    private FavoritePlacesRepository favoritePlaces;
     private static final int SPASH_TIME_OUT = 4000;
     private RingProgressBar ringProgressBar;
     private Handler myHandler;
@@ -82,8 +95,21 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-        ringProgressBar = (RingProgressBar) findViewById(R.id.ringProgressBar);
+        ringProgressBar = findViewById(R.id.ringProgressBar);
         setRingProgress();
+        favoritePlaces = new FavoritePlacesRepository(this.getApplication());
+
+        //Test
+
+//        Log.d("chatluong", listFavorite.toString());
+
+//        favoritePlaces.getALlPlace().observe(this, new Observer<List<FavoritePlaces>>() {
+//            @Override
+//            public void onChanged(@Nullable final List<FavoritePlaces> places) {
+//                // Update the cached copy of the words in the adapter.
+//                adapter.setWords(words);
+//            }
+//        });
     }
 
     @SuppressLint("HandlerLeak")

@@ -53,10 +53,10 @@ public class PlaceInfoActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonRes = new JSONObject(response);
 
-                        mViewPager = (ViewPager) findViewById(R.id.container);
+                        mViewPager = findViewById(R.id.container);
                         setupViewPager(mViewPager, jsonRes);
 
-                        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                        TabLayout tabLayout = findViewById(R.id.tabs);
                         tabLayout.setupWithViewPager(mViewPager);
 
                     } catch (JSONException e) {
@@ -116,7 +116,6 @@ public class PlaceInfoActivity extends AppCompatActivity {
             bundle.putString("STORE_PHONE", jsonRes.get("formatted_phone_number").toString());
 
             bundle.putString("REVIEWS", jsonStringReviews);
-
             bundle.putDouble("RATING", jsonRes.getDouble("rating"));
 
             tab1.setArguments(bundle);

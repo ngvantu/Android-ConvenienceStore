@@ -32,8 +32,8 @@ public class PlaceInfoTab2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_info_tab2, container, false);
 
-        txtRating = (TextView) view.findViewById(R.id.googleRatingText);
-        ratingBar = (RatingBar) view.findViewById(R.id.googleRatingBar);
+        txtRating = view.findViewById(R.id.googleRatingText);
+        ratingBar = view.findViewById(R.id.googleRatingBar);
 
         txtRating.setText(String.valueOf(getArguments().getDouble("RATING")) + "/5");
         ratingBar.setRating((float) getArguments().getDouble("RATING"));
@@ -42,7 +42,7 @@ public class PlaceInfoTab2 extends Fragment {
 
             JSONArray jsonReviews = new JSONArray(getArguments().getString("REVIEWS"));
 
-            recyclerView = (RecyclerView) view.findViewById(R.id.recycler_google_comment);
+            recyclerView = view.findViewById(R.id.recycler_google_comment);
             recyclerView.setHasFixedSize(true);
             layoutManager = new LinearLayoutManager(this.getActivity());
             recyclerView.setLayoutManager(layoutManager);

@@ -14,9 +14,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.FavoritePlaces;
 import team25.conveniencestore.models.GooglePlace;
 
-public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapter.ViewHolder> {
+public class FavoriteStoresAdapter extends RecyclerView.Adapter<FavoriteStoresAdapter.ViewHolder> {
 
     // ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -31,36 +32,28 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
             address = itemView.findViewById(R.id.dlg_store_adress);
             star = itemView.findViewById(R.id.dlg_store_star);
             ratingBar = itemView.findViewById(R.id.dlg_ratingbar);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.OnItemClick(getAdapterPosition());
-                }
-            });
         }
     }
 
     // constuctor
-    private List<GooglePlace> resultStores;
-    private OnItemClickListener onItemClickListener;
+    private List<FavoritePlaces> favoriteStores;
 
-    public ResultStoresAdapter(List<GooglePlace> resultStores, OnItemClickListener onItemClickListener) {
-        this.resultStores = resultStores;
-        this.onItemClickListener = onItemClickListener;
+    public FavoriteStoresAdapter(List<FavoritePlaces> favoriteStores) {
+        this.favoriteStores = favoriteStores;
     }
 
     @Override
-    public ResultStoresAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public FavoriteStoresAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_result_store_row, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ResultStoresAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.name.setText(resultStores.get(i).getName());
-        viewHolder.address.setText(resultStores.get(i).getVicinity());
-        viewHolder.star.setText(String.valueOf(resultStores.get(i).getRating()));
-        viewHolder.ratingBar.setRating(Float.valueOf(String.valueOf(resultStores.get(i).getRating())));
+    public void onBindViewHolder(@NonNull FavoriteStoresAdapter.ViewHolder viewHolder, int i) {
+        viewHolder.name.setText(favoriteStores.get(i).name);
+        viewHolder.address.setText(favoriteStores.get(i).vicinity);
+        viewHolder.star.setText(String.valueOf(favoriteStores.get(i).rating));
+        viewHolder.ratingBar.setRating(Float.valueOf(String.valueOf(favoriteStores.get(i).rating)));
         LayerDrawable stars = (LayerDrawable) viewHolder.ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
@@ -69,10 +62,6 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
 
     @Override
     public int getItemCount() {
-        return resultStores.size();
-    }
-
-    public interface OnItemClickListener {
-        void OnItemClick(int position);
+        return favoriteStores.size();
     }
 }

@@ -19,8 +19,8 @@ public class PlaceInfoTabError extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_info_expired, container, false);
-        TextView txtStatus = (TextView) view.findViewById(R.id.placeinfo_api_expired_status);
-        TextView txtMessage = (TextView) view.findViewById(R.id.placeinfo_api_expired_message);
+        TextView txtStatus = view.findViewById(R.id.placeinfo_api_expired_status);
+        TextView txtMessage = view.findViewById(R.id.placeinfo_api_expired_message);
 
         txtStatus.setText(getArguments().getString("ERROR_STATUS"));
         txtMessage.setText(getArguments().getString("ERROR_MESSAGE"));

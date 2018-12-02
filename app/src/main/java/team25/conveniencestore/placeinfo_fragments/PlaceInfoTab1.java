@@ -19,9 +19,9 @@ public class PlaceInfoTab1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_info_tab1, container, false);
-        TextView txtName = (TextView) view.findViewById(R.id.store_name);
-        TextView txtAddr = (TextView) view.findViewById(R.id.placeinfo_address);
-        TextView txtPhone = (TextView) view.findViewById(R.id.placeinfo_phone);
+        TextView txtName = view.findViewById(R.id.store_name);
+        TextView txtAddr = view.findViewById(R.id.placeinfo_address);
+        TextView txtPhone = view.findViewById(R.id.placeinfo_phone);
 
         txtName.setText(getArguments().getString("STORE_NAME"));
         txtAddr.setText(getArguments().getString("STORE_ADDRESS"));

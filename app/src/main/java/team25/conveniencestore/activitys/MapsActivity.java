@@ -68,6 +68,9 @@ import java.util.List;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.FavoritePlaces;
+import team25.conveniencestore.SqlProvider.FavoritePlacesDatabase;
+import team25.conveniencestore.SqlProvider.FavoritePlacesRepository;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
@@ -101,6 +104,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<GooglePlace> resultStores = new ArrayList<>();
+    private List<FavoritePlaces> favoriteStores = new ArrayList<>();
+
     private ProgressDialog progressDialog;
 
     private Button btnFindPlace;
@@ -139,6 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Initalize();
+        favoriteStores = getIntent().getParcelableArrayListExtra("favoriteList");
         drawerLayout =  findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -156,8 +162,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
-
-
     }
 /*
     @Override
@@ -351,18 +355,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void mappingController() {
-        btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
+        btnFindPlace = findViewById(R.id.btnFindPlace);
 
-        btnFindPath = (Button) findViewById(R.id.btnFindPath);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
-        btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
-        btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
+        btnFindPath = findViewById(R.id.btnFindPath);
+        btnSearch = findViewById(R.id.btnSearch);
+        btnSearchNearMe = findViewById(R.id.btnSearchNearMe);
+        btnResult = findViewById(R.id.btnResult);
+        btnFeedback = findViewById(R.id.btnFeedback);
 
-        btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
-        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
-        floatingBTN =(FloatingActionButton) findViewById(R.id.floatingBTN);
+        btnDeleteInputSearchStore = findViewById(R.id.btnDeleteInputSearchStore);
+        mSearchText = findViewById(R.id.input_search);
+        floatingBTN = findViewById(R.id.floatingBTN);
+        floatingBTN = findViewById(R.id.floatingBTN);
         Move_Left = AnimationUtils.loadAnimation(this,R.anim.move_left);
         Back_Left = AnimationUtils.loadAnimation(this,R.anim.back_left);
         Move_Above = AnimationUtils.loadAnimation(this,R.anim.move_above);
@@ -420,10 +424,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
-                final AutoCompleteTextView actvFindPlace = (AutoCompleteTextView) view.findViewById(R.id.actvFindPlace);
-                ImageButton imgbtnFindPlace = (ImageButton) view.findViewById(R.id.imgbtnFindPlace);
-                Button btnFind = (Button) view.findViewById(R.id.dlg_FindPlace_btnFind);
-                Button btnClose = (Button) view.findViewById(R.id.dlg_FindPlace_btnClose);
+                final AutoCompleteTextView actvFindPlace = view.findViewById(R.id.actvFindPlace);
+                ImageButton imgbtnFindPlace = view.findViewById(R.id.imgbtnFindPlace);
+                Button btnFind = view.findViewById(R.id.dlg_FindPlace_btnFind);
+                Button btnClose = view.findViewById(R.id.dlg_FindPlace_btnClose);
 
                 PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(getApplicationContext(), googleApiClient, LAT_LNG_BOUNDS, null);
                 actvFindPlace.setAdapter(placeAutoCompleteAdapter);
@@ -655,7 +659,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(currentLocation != null)
         {
             LatLng latLngCurrent = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngCurrent, 15f));
         }
     }

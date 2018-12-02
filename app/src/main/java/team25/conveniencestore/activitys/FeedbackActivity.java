@@ -72,10 +72,10 @@ public class FeedbackActivity extends Activity {
         setContentView(R.layout.activity_feedback);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        tvName = (TextView) findViewById(R.id.tvName) ;
-        etTitle = (EditText) findViewById(R.id.etTitle);
-        etContent = (EditText) findViewById(R.id.etContent);
-        btnSendFeedback = (ImageButton) findViewById(R.id.btnSendFeedback);
+        tvName = findViewById(R.id.tvName);
+        etTitle = findViewById(R.id.etTitle);
+        etContent = findViewById(R.id.etContent);
+        btnSendFeedback = findViewById(R.id.btnSendFeedback);
 
         if(user != null) {
             String sender = user.getEmail();
@@ -91,7 +91,7 @@ public class FeedbackActivity extends Activity {
             }
         });
 
-        btnOpenGmail =(ImageButton) findViewById(R.id.btnGmail);
+        btnOpenGmail = findViewById(R.id.btnGmail);
         btnOpenGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

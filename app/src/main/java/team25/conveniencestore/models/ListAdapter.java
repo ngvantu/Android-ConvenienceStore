@@ -32,19 +32,19 @@ public class ListAdapter extends ArrayAdapter<GooglePlace> {
         GooglePlace p = getItem(position);
         if (p != null) {
             // Anh xa + Gan gia tri
-            TextView name = (TextView) view.findViewById(R.id.dlg_store_name);
+            TextView name = view.findViewById(R.id.dlg_store_name);
             name.setText(p.getName());
 
-            TextView star = (TextView) view.findViewById(R.id.dlg_store_star);
+            TextView star = view.findViewById(R.id.dlg_store_star);
             star.setText(String.valueOf(p.getRating()));
-            RatingBar ratingBar = (RatingBar) view.findViewById(R.id.dlg_ratingbar);
+            RatingBar ratingBar = view.findViewById(R.id.dlg_ratingbar);
             ratingBar.setRating(Float.parseFloat(star.getText().toString()));
             LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(0).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
             stars.getDrawable(1).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
-            TextView adrress = (TextView) view.findViewById(R.id.dlg_store_adress);
+            TextView adrress = view.findViewById(R.id.dlg_store_adress);
             adrress.setText(p.getVicinity());
         }
         return view;
