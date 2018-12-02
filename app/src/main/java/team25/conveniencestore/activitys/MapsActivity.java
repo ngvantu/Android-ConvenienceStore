@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,17 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.data.model.Resource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,10 +49,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import team25.conveniencestore.FindPlace;
@@ -72,13 +60,9 @@ import team25.conveniencestore.SqlProvider.FavoritePlaces;
 import team25.conveniencestore.SqlProvider.FavoritePlacesDatabase;
 import team25.conveniencestore.SqlProvider.FavoritePlacesRepository;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
-import team25.conveniencestore.adapter.ResultStoresAdapter;
-import team25.conveniencestore.adapter.ResultStoresAdapter.OnItemClickListener;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragments.DialogResultStores;
-//import team25.conveniencestore.fragments.PlaceInfoTab1;
 import team25.conveniencestore.fragments.ResultStoresFragment;
-//import team25.conveniencestore.fragments.SectionsPageAdapter;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
@@ -89,7 +73,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DirectionFinderListener, LocationListener {
 
     private DrawerLayout drawerLayout;
-    public static Resources resources;
     private GoogleMap mMap;
     private Button btnFindPath;
     private Button btnSearch;
@@ -97,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
-    private Animation Move_Left, Back_Left,Move_Above, Back_Above, Move_Middle, Back_Middle;
+    private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle;
     private AutoCompleteTextView mSearchText;
     private Marker marker;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -144,8 +127,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Initalize();
-        favoriteStores = getIntent().getParcelableArrayListExtra("favoriteList");
         drawerLayout =  findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -283,15 +266,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     boolean makeMarkerIconForStore(MarkerOptions markerOptions, String storeName) {
-        if(storeName.toLowerCase().contains("family")) {
+        if (storeName.toLowerCase().contains("family")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfamily));
-        } else if(storeName.toLowerCase().contains("circle")) {
+        } else if (storeName.toLowerCase().contains("circle")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerk));
-        } else if(storeName.toLowerCase().contains("mini")) {
+        } else if (storeName.toLowerCase().contains("mini")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markermini));
-        } else if(storeName.toLowerCase().contains("b's")) {
+        } else if (storeName.toLowerCase().contains("b's")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
-        } else if(storeName.toLowerCase().contains("vinmart")) {
+        } else if (storeName.toLowerCase().contains("vinmart")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
         } else {
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
@@ -340,6 +323,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -355,24 +342,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void mappingController() {
-        btnFindPlace = findViewById(R.id.btnFindPlace);
+        btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
 
-        btnFindPath = findViewById(R.id.btnFindPath);
-        btnSearch = findViewById(R.id.btnSearch);
-        btnSearchNearMe = findViewById(R.id.btnSearchNearMe);
-        btnResult = findViewById(R.id.btnResult);
-        btnFeedback = findViewById(R.id.btnFeedback);
+        btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btnSearch = (Button) findViewById(R.id.btnSearch);
+        btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
+        btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
+        btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
 
-        btnDeleteInputSearchStore = findViewById(R.id.btnDeleteInputSearchStore);
-        mSearchText = findViewById(R.id.input_search);
-        floatingBTN = findViewById(R.id.floatingBTN);
-        floatingBTN = findViewById(R.id.floatingBTN);
-        Move_Left = AnimationUtils.loadAnimation(this,R.anim.move_left);
-        Back_Left = AnimationUtils.loadAnimation(this,R.anim.back_left);
-        Move_Above = AnimationUtils.loadAnimation(this,R.anim.move_above);
-        Back_Above = AnimationUtils.loadAnimation(this,R.anim.back_above);
-        Move_Middle = AnimationUtils.loadAnimation(this,R.anim.move_middle);
-        Back_Middle = AnimationUtils.loadAnimation(this,R.anim.back_middle);
+        btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
+        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
+        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
+        Move_Left = AnimationUtils.loadAnimation(this, R.anim.move_left);
+        Back_Left = AnimationUtils.loadAnimation(this, R.anim.back_left);
+        Move_Above = AnimationUtils.loadAnimation(this, R.anim.move_above);
+        Back_Above = AnimationUtils.loadAnimation(this, R.anim.back_above);
+        Move_Middle = AnimationUtils.loadAnimation(this, R.anim.move_middle);
+        Back_Middle = AnimationUtils.loadAnimation(this, R.anim.back_middle);
     }
 
     private void settingController() {
@@ -446,7 +433,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        FindPlace findPlace = new FindPlace(getApplicationContext() ,mMap, input);
+                        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input);
                         try {
                             findPlace.execute();
                             pickingLocation = mMap.getCameraPosition().target;
@@ -513,7 +500,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
-                if(!moveBack) {
+                if (!moveBack) {
                     Show();
                     moveBack = !moveBack;
                 } else {
@@ -656,10 +643,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         startLocationUpdates();
 
-        if(currentLocation != null)
-        {
+        if (currentLocation != null) {
             LatLng latLngCurrent = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngCurrent, 15f));
+        } else {
+            LatLng hcmus = new LatLng(10.762683, 106.682108);
+            //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
         }
     }
 
