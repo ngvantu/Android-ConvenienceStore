@@ -56,12 +56,10 @@ import java.util.List;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
-import team25.conveniencestore.SqlProvider.FavoritePlaces;
-import team25.conveniencestore.SqlProvider.FavoritePlacesDatabase;
-import team25.conveniencestore.SqlProvider.FavoritePlacesRepository;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragments.DialogResultStores;
+import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
@@ -87,7 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<GooglePlace> resultStores = new ArrayList<>();
-    private List<FavoritePlaces> favoriteStores = new ArrayList<>();
+    private List<GooglePlace> favoriteStores = new ArrayList<>();
 
     private ProgressDialog progressDialog;
 
@@ -307,6 +305,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DialogResultStores dialogResultStores = new DialogResultStores();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
+        bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
         dialogResultStores.setArguments(bundle);
         dialogResultStores.show(getSupportFragmentManager(), "DialogResultStores");
     }

@@ -1,15 +1,31 @@
 package team25.conveniencestore.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import team25.conveniencestore.SqlProvider.Converter;
+
+@Entity(tableName = "GooglePlace")
 public class GooglePlace implements Parcelable{
+    @PrimaryKey() @NonNull
+    @ColumnInfo(name = "id")
     private String id;
+    @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "vincinity")
     private String vicinity;
+    @TypeConverters(Converter.class)
+    @ColumnInfo(name = "latLng")
     private LatLng latLng;
+    @ColumnInfo(name = "rating")
     private double rating;
 
     public GooglePlace(String id, String name, String vicinity, LatLng latLng, double rating) {

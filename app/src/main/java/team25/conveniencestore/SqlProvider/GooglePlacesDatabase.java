@@ -7,15 +7,16 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.util.List;
+import com.google.android.gms.maps.model.LatLng;
+
+import team25.conveniencestore.models.GooglePlace;
 
 
-@Database(entities = {FavoritePlaces.class}, version = 1)
-public abstract class FavoritePlacesDatabase extends RoomDatabase {
+@Database(entities = {GooglePlace.class}, version = 1)
+public abstract class GooglePlacesDatabase extends RoomDatabase {
 
-    private static FavoritePlacesDatabase.Callback sRoomDatabaseCallback =
+    private static GooglePlacesDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback(){
 
                 @Override
@@ -27,33 +28,33 @@ public abstract class FavoritePlacesDatabase extends RoomDatabase {
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final FavoritePlacesDao mDao;
+        private final GooglePlacesDAO mDao;
 
-        PopulateDbAsync(FavoritePlacesDatabase db) {
+        PopulateDbAsync(GooglePlacesDatabase db) {
             mDao = db.placesDAO();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
-            mDao.insertPlace( new FavoritePlaces(1,"test place",10,10,"he he",5));
-            mDao.insertPlace( new FavoritePlaces(2,"test place",10,10,"he he",5));
-            mDao.insertPlace( new FavoritePlaces(3,"test place",10,10,"he he",5));
-            mDao.insertPlace( new FavoritePlaces(4,"test place",10,10,"he he",5));
+            mDao.insertPlace( new GooglePlace(String.valueOf(1),"test place 1","he he", new LatLng(10.762683, 106.682108),4.6));
+            mDao.insertPlace( new GooglePlace(String.valueOf(2),"test place 2","he he", new LatLng(10.762683, 106.682108),4.8));
+            mDao.insertPlace( new GooglePlace(String.valueOf(3),"test place 3","he he", new LatLng(10.762683, 106.682108),3.9));
+            mDao.insertPlace( new GooglePlace(String.valueOf(4),"test place 4","he he", new LatLng(10.762683, 106.682108),4.3));
             return null;
         }
     }
 
-    private static volatile FavoritePlacesDatabase INSTANCE;
+    private static volatile GooglePlacesDatabase INSTANCE;
 
-    public abstract FavoritePlacesDao placesDAO();
+    public abstract GooglePlacesDAO placesDAO();
 
 
-    public static FavoritePlacesDatabase getInstance(Context context) {
+    public static GooglePlacesDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (FavoritePlacesDatabase.class) {
+            synchronized (GooglePlacesDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            FavoritePlacesDatabase.class, "favorite_database")
+                            GooglePlacesDatabase.class, "favorite_database")
                             .addCallback(sRoomDatabaseCallback)
                             .allowMainThreadQueries()
                             .build();

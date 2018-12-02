@@ -2,20 +2,16 @@ package team25.conveniencestore.activitys;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,9 +20,8 @@ import java.util.List;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 import team25.conveniencestore.R;
-import team25.conveniencestore.SqlProvider.FavoritePlaces;
-import team25.conveniencestore.SqlProvider.FavoritePlacesRepository;
-import team25.conveniencestore.SqlProvider.FavoritePlacesViewModel;
+import team25.conveniencestore.SqlProvider.GooglePlacesRepository;
+import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.models.GooglePlace;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -83,9 +78,9 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
-    private FavoritePlacesViewModel mViewModel;
-    private List<FavoritePlaces> listFavorite = new ArrayList<>();
-    private FavoritePlacesRepository favoritePlaces;
+    private GooglePlacesViewModel mViewModel;
+    private List<GooglePlace> listFavorite = new ArrayList<>();
+    private GooglePlacesRepository favoritePlaces;
     private static final int SPASH_TIME_OUT = 4000;
     private RingProgressBar ringProgressBar;
     private Handler myHandler;
@@ -97,7 +92,7 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         ringProgressBar = findViewById(R.id.ringProgressBar);
         setRingProgress();
-        favoritePlaces = new FavoritePlacesRepository(this.getApplication());
+        favoritePlaces = new GooglePlacesRepository(this.getApplication());
 
         //Test
 

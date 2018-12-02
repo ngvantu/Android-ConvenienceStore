@@ -8,17 +8,19 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-@Dao
-public interface FavoritePlacesDao {
-    @Query("SELECT * FROM FavoritePlaces WHERE id = :placeid")
-    FavoritePlaces getPlaceById(int placeid);
+import team25.conveniencestore.models.GooglePlace;
 
-    @Query("SELECT * FROM FavoritePlaces")
-    List<FavoritePlaces> getALlPlace();
+@Dao
+public interface GooglePlacesDAO {
+    @Query("SELECT * FROM GooglePlace WHERE id = :placeid")
+    GooglePlace getPlaceById(int placeid);
+
+    @Query("SELECT * FROM GooglePlace")
+    List<GooglePlace> getAllPlace();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPlace(FavoritePlaces place);
+    void insertPlace(GooglePlace place);
 
     @Delete
-    void deletePlace(FavoritePlaces places);
+    void deletePlace(GooglePlace places);
 }

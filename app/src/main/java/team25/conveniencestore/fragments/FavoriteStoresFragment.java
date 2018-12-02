@@ -1,6 +1,5 @@
 package team25.conveniencestore.fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,17 +14,14 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import team25.conveniencestore.R;
-import team25.conveniencestore.SqlProvider.FavoritePlaces;
-import team25.conveniencestore.SqlProvider.FavoritePlacesViewModel;
 import team25.conveniencestore.activitys.PlaceInfoActivity;
-import team25.conveniencestore.adapter.FavoriteStoresAdapter;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.models.GooglePlace;
 
 public class FavoriteStoresFragment extends Fragment {
-    private static String TAG = "FavoriteStoresFragment";
-
-    private List<FavoritePlaces> favoriteStores;
+    private static String TAG = "ResultStoresFragment";
+    public static String LIST_FAVORITES = "LIST_FAVORITES";
+    private List<GooglePlace> favoriteStores;
 
     @Nullable
     @Override
@@ -34,10 +30,17 @@ public class FavoriteStoresFragment extends Fragment {
         RecyclerView rcvResultStores = view.findViewById(R.id.rcv_result_stores);
         rcvResultStores.setHasFixedSize(true);
 
-        FavoritePlacesViewModel model = ViewModelProviders.of(this).get(FavoritePlacesViewModel.class);
-        favoriteStores = model.getAllWords();
-
-        FavoriteStoresAdapter rsAdapter = new FavoriteStoresAdapter(favoriteStores);
+        if (getArguments() != null) {
+            favoriteStores = getArguments().getParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES);
+        }
+        ResultStoresAdapter rsAdapter = new ResultStoresAdapter(favoriteStores, new ResultStoresAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(int position) {
+                Intent i = new Intent(getActivity(), PlaceInfoActivity.class);
+                i.putExtra("PLACE_ID", favoriteStores.get(position).getId());
+                startActivity(i);
+            }
+        });
         rcvResultStores.setAdapter(rsAdapter);
         rcvResultStores.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;

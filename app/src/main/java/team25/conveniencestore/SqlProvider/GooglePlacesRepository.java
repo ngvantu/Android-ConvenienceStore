@@ -2,19 +2,20 @@ package team25.conveniencestore.SqlProvider;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
-public class FavoritePlacesRepository {
+import team25.conveniencestore.models.GooglePlace;
 
-    private FavoritePlacesDao mDao;
-    private List<FavoritePlaces> mAll;
+public class GooglePlacesRepository {
 
-    public FavoritePlacesRepository(Application application) {
-        FavoritePlacesDatabase db = FavoritePlacesDatabase.getInstance(application);
+    private GooglePlacesDAO mDao;
+    private List<GooglePlace> mAll;
+
+    public GooglePlacesRepository(Application application) {
+        GooglePlacesDatabase db = GooglePlacesDatabase.getInstance(application);
         mDao = db.placesDAO();
-        mAll = mDao.getALlPlace();
+        mAll = mDao.getAllPlace();
 //        new getAllAsyncTask(mDao,new AsyncResponse(){
 //
 //            @Override
@@ -28,7 +29,7 @@ public class FavoritePlacesRepository {
     }
 
 
-    public FavoritePlaces getPlaceById(int id) {
+    public GooglePlace getPlaceById(int id) {
 //        new getAllAsyncTask(mDao,new AsyncResponse(){
 //
 //            @Override
@@ -41,7 +42,7 @@ public class FavoritePlacesRepository {
     }
 
 
-    public List<FavoritePlaces> getALlPlace() {
+    public List<GooglePlace> getAllPlace() {
 //        new getAllAsyncTask(mDao,new AsyncResponse(){
 //
 //            @Override
@@ -53,62 +54,62 @@ public class FavoritePlacesRepository {
         return mAll;
     }
 
-    private static class getAllAsyncTask extends AsyncTask<Void, Void, List<FavoritePlaces>> {
+    private static class getAllAsyncTask extends AsyncTask<Void, Void, List<GooglePlace>> {
 
         public AsyncResponse delegate = null;
 
-        private FavoritePlacesDao mAsyncTaskDao;
-        getAllAsyncTask(FavoritePlacesDao dao,AsyncResponse delegate) {
+        private GooglePlacesDAO mAsyncTaskDao;
+        getAllAsyncTask(GooglePlacesDAO dao, AsyncResponse delegate) {
             mAsyncTaskDao = dao;
             this.delegate = delegate;
         }
 
         @Override
-        protected List<FavoritePlaces> doInBackground(Void... voids) {
-            return mAsyncTaskDao.getALlPlace();
+        protected List<GooglePlace> doInBackground(Void... voids) {
+            return mAsyncTaskDao.getAllPlace();
         }
 
         @Override
-        protected void onPostExecute(List<FavoritePlaces> listResult) {
+        protected void onPostExecute(List<GooglePlace> listResult) {
             delegate.processFinish(listResult);
         }
     }
 
     //insert
-    public void insertPlace (FavoritePlaces place) {
+    public void insertPlace (GooglePlace place) {
         new insertAsyncTask(mDao).execute(place);
     }
 
-    private static class insertAsyncTask extends AsyncTask<FavoritePlaces, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<GooglePlace, Void, Void> {
 
-        private FavoritePlacesDao mAsyncTaskDao;
+        private GooglePlacesDAO mAsyncTaskDao;
 
-        insertAsyncTask(FavoritePlacesDao dao) {
+        insertAsyncTask(GooglePlacesDAO dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
-        protected Void doInBackground(final FavoritePlaces... params) {
+        protected Void doInBackground(final GooglePlace... params) {
             mAsyncTaskDao.insertPlace(params[0]);
             return null;
         }
     }
 
     //delete
-    public void deletePlace (FavoritePlaces place) {
+    public void deletePlace (GooglePlace place) {
         new deleteAsyncTask(mDao).execute(place);
     }
 
-    private static class deleteAsyncTask extends AsyncTask<FavoritePlaces, Void, Void> {
+    private static class deleteAsyncTask extends AsyncTask<GooglePlace, Void, Void> {
 
-        private FavoritePlacesDao mAsyncTaskDao;
+        private GooglePlacesDAO mAsyncTaskDao;
 
-        deleteAsyncTask(FavoritePlacesDao dao) {
+        deleteAsyncTask(GooglePlacesDAO dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
-        protected Void doInBackground(final FavoritePlaces... params) {
+        protected Void doInBackground(final GooglePlace... params) {
             mAsyncTaskDao.deletePlace(params[0]);
             return null;
         }
