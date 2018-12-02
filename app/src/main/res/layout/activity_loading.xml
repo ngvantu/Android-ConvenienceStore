@@ -25,7 +25,7 @@
         android:layout_marginBottom="25dp"
         app:ringColor="@android:color/darker_gray"
         app:ringProgressColor="@color/colorPrimary"
-        app:textColor="#ff0000"
+        app:textColor="@android:color/white"
         app:textSize="20sp"
         app:max="100"
         app:ringWidth="3dp"
