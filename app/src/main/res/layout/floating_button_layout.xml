@@ -14,13 +14,7 @@
         android:backgroundTint="#fff1"
         android:text="Near"
         android:visibility="invisible"
-<<<<<<< HEAD
-        android:src="@drawable/places_ic_search"
-=======
-        android:src="@drawable/ic_near_35pc"
-        android:scaleType="center"
->>>>>>> a18ec89190639b3f89d43cbbbc929ad7ffc0839a
-      />
+        android:src="@drawable/places_ic_search"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnResult"

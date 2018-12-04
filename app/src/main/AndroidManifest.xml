@@ -55,7 +55,8 @@
             android:name=".activitys.PlaceInfoActivity"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".fragment.menu_tab1">
+        <activity android:name=".fragment.menu_tab1"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

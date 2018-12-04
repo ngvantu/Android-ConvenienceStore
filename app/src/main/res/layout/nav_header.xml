@@ -4,28 +4,42 @@
     android:layout_height="176dp"
     android:background="#3535C8"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/personal">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_people"/>
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:text="TNTDS"
-        android:background="@color/fui_transparent"
-        android:gravity="left"
-        />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_people"/>
 
-    <Button
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="TNTDS"
+            android:background="@color/fui_transparent"
+            android:gravity="left"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="25@gmail.com"
+            android:background="@color/fui_transparent"
+            />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:text="25@gmail.com"
-        android:background="@color/fui_transparent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
         />
 </LinearLayout>
