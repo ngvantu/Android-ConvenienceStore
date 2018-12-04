@@ -13,6 +13,8 @@
         android:backgroundTint="#fff1"
         android:text="Near"
         android:visibility="invisible"
+        android:src="@drawable/ic_near_35pc"
+        android:scaleType="center"
       />
 
     <android.support.design.widget.FloatingActionButton
@@ -25,6 +27,8 @@
         android:layout_marginRight="32dp"
         android:text="KQ"
         android:visibility="invisible"
+        android:src="@drawable/ic_result_35px"
+        android:scaleType="center"
         />
 
     <android.support.design.widget.FloatingActionButton
@@ -35,8 +39,10 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="32dp"
         android:layout_marginRight="110dp"
+        android:src="@drawable/ic_feedback_35px"
         android:text="FB"
         android:visibility="invisible"
+        android:scaleType="center"
         />
 
 </FrameLayout>
