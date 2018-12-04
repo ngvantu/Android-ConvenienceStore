@@ -118,12 +118,13 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingBTN"
+            android:src="@drawable/ic_add"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="32dp"
-            android:backgroundTint="#41b641"
+            android:backgroundTint="#999"
             app:layout_constraintBottom_toBottomOf="@+id/include"
-            app:layout_constraintEnd_toEndOf="@+id/include" />
+            app:layout_constraintEnd_toEndOf="@+id/include"           />
 
         <include
             android:id="@+id/include"
@@ -138,6 +139,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:menu="@menu/menu_nav"
+        app:headerLayout="@layout/nav_header">
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

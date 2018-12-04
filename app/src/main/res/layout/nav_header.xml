@@ -2,30 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@color/colorAccent"
+    android:background="#3535C8"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:id="@+id/personal">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_people"/>
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:text="ETS_Launcher"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        android:textColor="@color/colorPrimary" />
+        android:layout_height="30dp"
+        android:text="TNTDS"
+        android:background="@color/fui_transparent"
+        android:gravity="left"
+        />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp"
-        android:text="ETS123@gmail.com"
-        android:textColor="@color/colorPrimaryDark" />
+        android:layout_height="30dp"
+        android:text="25@gmail.com"
+        android:background="@color/fui_transparent"
+        />
 </LinearLayout>

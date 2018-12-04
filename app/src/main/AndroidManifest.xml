@@ -35,7 +35,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".activitys.LoadingActivity"
+        <activity
+            android:name=".activitys.LoadingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,8 +47,7 @@
         <activity
             android:name=".activitys.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
         <activity
             android:name=".activitys.FeedbackActivity"
             android:label="@string/title_activity_feedback" />
@@ -55,6 +55,13 @@
             android:name=".activitys.PlaceInfoActivity"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".fragment.menu_tab1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

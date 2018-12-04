@@ -5,34 +5,39 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/Launch"
+            android:id="@+id/tab1"
             android:orderInCategory="100"
-            android:title="@string/Launch"
+            android:title="@string/tab1"
             app:showAsAction="never"
-
+            android:icon="@drawable/ic_location"
             />
         <item
-            android:id="@+id/Account"
+            android:id="@+id/tab2"
             android:orderInCategory="100"
-            android:title="@string/Account"
-            app:showAsAction="never" />
+            android:title="@string/tab2"
+            app:showAsAction="never"
+            android:icon="@drawable/ic_timeline"/>
 
         <item
-            android:id="@+id/Help"
+            android:id="@+id/tab3"
             android:orderInCategory="100"
-            android:title="@string/Help"
-            app:showAsAction="never" />
+            android:title="@string/tab3"
+            app:showAsAction="never"
+            android:icon="@drawable/ic_contribution"/>
 
         <item
-            android:id="@+id/Contact"
+            android:id="@+id/tab4"
             android:orderInCategory="100"
-            android:title="@string/Contact"
-            app:showAsAction="never" />
+            android:title="@string/tab4"
+            app:showAsAction="never"
+            android:icon="@drawable/ic_share_position"
+            />
 
         <item
-            android:id="@+id/Feedback"
+            android:id="@+id/tab5"
             android:orderInCategory="100"
-            android:title="@string/Feedback"
-            app:showAsAction="never" />
+            android:title="@string/tab5"
+            app:showAsAction="never"
+            android:icon="@drawable/ic_directions"/>
     </group>
 </menu>
