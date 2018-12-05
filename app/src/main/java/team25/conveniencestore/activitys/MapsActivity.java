@@ -3,6 +3,7 @@ package team25.conveniencestore.activitys;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -56,6 +57,7 @@ import java.util.List;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragments.DialogResultStores;
@@ -290,10 +292,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(markerOptions);
     }
 
+    private void showFavoriteStores() {
+        GooglePlacesViewModel viewModel = ViewModelProviders.of(this).get(GooglePlacesViewModel.class);
+        favoriteStores.clear();
+        favoriteStores = viewModel.getAll();
+
+        for (int i = 0; i < favoriteStores.size(); i++) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            GooglePlace googlePlace = favoriteStores.get(i);
+
+            String placeName = googlePlace.getName();
+            String vicinity = googlePlace.getVicinity();
+            LatLng latLng = googlePlace.getLatLng();
+            String placeID = googlePlace.getId();
+
+            markerOptions.position(latLng);
+            markerOptions.title(placeName + " : " + vicinity);
+            markerOptions.snippet(placeID);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+            mMap.addMarker(markerOptions);
+        }
+    }
+
     private void notifyChangedMapData(LatLng pickingLocation) {
         mMap.clear();
         showPickingLocation();
         showNearbyPlaces(pickingLocation);
+        showFavoriteStores();
     }
 
     private void showDialogResultStores() {
@@ -436,6 +461,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         try {
                             findPlace.execute();
                             pickingLocation = mMap.getCameraPosition().target;
+                            showFavoriteStores();
                             alertDialog.dismiss();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -650,6 +676,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //mMap.addMarker(new MarkerOptions().position(hcmus).title("Khoa học tự nhiên"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 15f));
         }
+        showFavoriteStores();
     }
 
     private void startLocationUpdates() {

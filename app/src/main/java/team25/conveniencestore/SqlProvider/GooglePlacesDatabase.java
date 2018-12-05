@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import team25.conveniencestore.models.GooglePlace;
 
 
 @Database(entities = {GooglePlace.class}, version = 1)
+@TypeConverters({Converter.class})
 public abstract class GooglePlacesDatabase extends RoomDatabase {
 
     private static GooglePlacesDatabase.Callback sRoomDatabaseCallback =
@@ -36,10 +38,9 @@ public abstract class GooglePlacesDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            mDao.insertPlace( new GooglePlace(String.valueOf(1),"test place 1","he he", new LatLng(10.762683, 106.682108),4.6));
-            mDao.insertPlace( new GooglePlace(String.valueOf(2),"test place 2","he he", new LatLng(10.762683, 106.682108),4.8));
-            mDao.insertPlace( new GooglePlace(String.valueOf(3),"test place 3","he he", new LatLng(10.762683, 106.682108),3.9));
-            mDao.insertPlace( new GooglePlace(String.valueOf(4),"test place 4","he he", new LatLng(10.762683, 106.682108),4.3));
+            mDao.insertPlace( new GooglePlace(String.valueOf(1),"test place 1","he he", new LatLng(10.764006, 106.679985),4.6));
+            mDao.insertPlace( new GooglePlace(String.valueOf(2),"test place 2","he he", new LatLng(10.766620, 106.683096),4.8));
+            mDao.insertPlace( new GooglePlace(String.valueOf(3),"test place 3","he he", new LatLng(10.762615, 106.687130),3.9));
             return null;
         }
     }

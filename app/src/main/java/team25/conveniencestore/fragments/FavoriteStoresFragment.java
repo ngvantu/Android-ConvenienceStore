@@ -1,5 +1,6 @@
 package team25.conveniencestore.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,14 +15,16 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.activitys.PlaceInfoActivity;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.models.GooglePlace;
 
 public class FavoriteStoresFragment extends Fragment {
-    private static String TAG = "ResultStoresFragment";
+    private static String TAG = "FavoriteStoresFragment";
     public static String LIST_FAVORITES = "LIST_FAVORITES";
     private List<GooglePlace> favoriteStores;
+
 
     @Nullable
     @Override
@@ -30,9 +33,12 @@ public class FavoriteStoresFragment extends Fragment {
         RecyclerView rcvResultStores = view.findViewById(R.id.rcv_result_stores);
         rcvResultStores.setHasFixedSize(true);
 
-        if (getArguments() != null) {
-            favoriteStores = getArguments().getParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES);
-        }
+//        if (getArguments() != null) {
+//            favoriteStores = getArguments().getParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES);
+//        }
+
+        GooglePlacesViewModel viewModel = ViewModelProviders.of(this).get(GooglePlacesViewModel.class);
+        favoriteStores = viewModel.getAll();
         ResultStoresAdapter rsAdapter = new ResultStoresAdapter(favoriteStores, new ResultStoresAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(int position) {

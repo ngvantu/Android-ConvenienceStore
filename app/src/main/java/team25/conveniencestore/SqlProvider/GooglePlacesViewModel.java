@@ -19,7 +19,7 @@ public class GooglePlacesViewModel extends AndroidViewModel {
         mAllPlace = mRepository.getAllPlace();
     }
 
-    public List<GooglePlace> getAllWords() { return mAllPlace; }
+    public List<GooglePlace> getAll() { return mAllPlace; }
 
     public GooglePlace getPlaceById(int id) { return mRepository.getPlaceById(id); }
 
