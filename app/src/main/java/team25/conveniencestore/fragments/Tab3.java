@@ -1,4 +1,4 @@
-package team25.conveniencestore.fragment;
+package team25.conveniencestore.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 
 import team25.conveniencestore.R;
 
-public class LaunchFragment extends Fragment {
+public class Tab3 extends Fragment {
 
+    View mRootView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_launch, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_tab3, container,false);
+
+        return mRootView;
     }
 }

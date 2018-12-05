@@ -23,6 +23,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
         <AutoCompleteTextView
+            style="@style/TextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -34,7 +35,8 @@
             android:id="@+id/actvFindPlace"
             android:background="@null"
             android:hint="Nhập địa điểm"
-            android:imeOptions="actionSearch"/>
+            android:imeOptions="actionSearch"
+            />
         <ImageButton
             android:id="@+id/imgbtnFindPlace"
             android:layout_width="24dp"

@@ -60,6 +60,7 @@ import team25.conveniencestore.R;
 import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
+import team25.conveniencestore.fragment.menu_tab1;
 import team25.conveniencestore.fragments.DialogResultStores;
 import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
@@ -127,6 +128,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Initalize();
+
+        setNavigation();
+
+    }
+
+    private void setNavigation() {
+
         drawerLayout =  findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -135,8 +143,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
-                        menuItem.setChecked(true);
+                        //menuItem.setChecked(true);
                         // close drawer when item is tapped
+
+                        switch (menuItem.getItemId())
+                        {
+                            case R.id.tab1:
+                                Intent intent = new Intent(MapsActivity.this, menu_tab1.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.tab2:
+
+                                break;
+                            case R.id.tab3:
+
+                                break;
+                            case R.id.tab4:
+
+                                break;
+                            case R.id.tab5:
+
+                                break;
+                        }
                         drawerLayout.closeDrawers();
 
                         // Add code here to update the UI based on the item selected
@@ -145,6 +173,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
+
     }
 /*
     @Override
@@ -447,6 +476,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), "Chọn trên bản đồ", Toast.LENGTH_SHORT).show();
+
                     }
                 });
                 btnFind.setOnClickListener(new View.OnClickListener() {

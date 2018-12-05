@@ -1,4 +1,4 @@
-package team25.conveniencestore.fragment;
+package team25.conveniencestore.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 
 import team25.conveniencestore.R;
 
-public class AccountFragment extends Fragment {
+public class Tab6 extends Fragment {
 
+    View mRootView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_tab6, container,false);
+
+        return mRootView;
     }
 }

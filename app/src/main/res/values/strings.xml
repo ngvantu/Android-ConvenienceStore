@@ -22,11 +22,11 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="Launch">Launch</string>
-    <string name="Account">Account</string>
-    <string name="Help">Help</string>
-    <string name="Contact">Contact</string>
-    <string name="Feedback">Feedback</string>
+    <string name="tab1">Địa điểm của bạn</string>
+    <string name="tab2">Dòng thời gian của bạn</string>
+    <string name="tab3">Đóng góp của bạn</string>
+    <string name="tab4">Chia sẻ vị trí</string>
+    <string name="tab5">Bắt đầu lái xe</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
