@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -212,6 +214,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (keyWord.isEmpty()) {
             keyWord = "Cửa hàng tiện lợi";
         }
+        hideKeyboard(this.getCurrentFocus());
+
         try {
             if (currentLocation != null) {
                 placeNearbySearch = new PlaceNearbySearch(this, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, new SearchStoresListener() {
@@ -231,7 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
                 placeNearbySearch.execute();
             } else {
-                Toast.makeText(getApplicationContext(), "Chưa tìm thấy GPS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Không tìm thấy GPS", Toast.LENGTH_SHORT).show();
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -243,6 +247,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (keyWord.isEmpty()) {
             keyWord = "Cửa hàng tiện lợi";
         }
+        hideKeyboard(this.getCurrentFocus());
 
         try {
             if (pickingLocation != null) {
@@ -306,11 +311,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbmart));
         } else if (storeName.toLowerCase().contains("vinmart")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
+        } else if (storeName.toLowerCase().contains("7-eleven")) {
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        } else if (storeName.toLowerCase().contains("bách hóa xanh")) {
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        } else if (storeName.toLowerCase().contains("shop")) {
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         } else {
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             return false;
         }
         return true;
+    }
+
+    void findPlaceByText(String input) {
+        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input, new FindPlaceListener() {
+            @Override
+            public void onFindPlaceStart() {
+                progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm địa điểm", true);
+            }
+
+            @Override
+            public void onFindPlaceSuccess(GooglePlace googlePlace) {
+                if (pickingLocation != null) {
+                    currentMarker.remove();
+                }
+                if (googlePlace == null) {
+                    Toast.makeText(MapsActivity.this, "Không tìm thấy địa điểm!", Toast.LENGTH_SHORT).show();
+                } else {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(googlePlace.getLatLng());
+                    markerOptions.title(googlePlace.getName());
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    currentMarker = mMap.addMarker(markerOptions);
+
+                    pickingLocation = currentMarker.getPosition();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
+                }
+                progressDialog.dismiss();
+            }
+        });
+        try {
+            findPlace.execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showPickingLocation() {
@@ -472,6 +517,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 PlaceAutoCompleteAdapter placeAutoCompleteAdapter = new PlaceAutoCompleteAdapter(getApplicationContext(), googleApiClient, LAT_LNG_BOUNDS, null);
                 actvFindPlace.setAdapter(placeAutoCompleteAdapter);
+                actvFindPlace.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        boolean handle = false;
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            String input = actvFindPlace.getText().toString().trim();
+                            if (input.isEmpty()) {
+                                Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
+                            hideKeyboard(v);
+                            alertDialog.dismiss();
+                            findPlaceByText(input);
+                            handle = true;
+                        }
+                        return handle;
+                    }
+                });
 
                 imgbtnFindPlace.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -483,45 +546,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 btnFind.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String input = actvFindPlace.getText().toString();
+                        String input = actvFindPlace.getText().toString().trim();
                         if (input.isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input, new FindPlaceListener() {
-                            @Override
-                            public void onFindPlaceStart() {
-                                progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm địa điểm", true);
-                            }
-
-                            @Override
-                            public void onFindPlaceSuccess(GooglePlace googlePlace) {
-                                if (pickingLocation != null) {
-                                    currentMarker.remove();
-                                }
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                markerOptions.position(googlePlace.getLatLng());
-                                markerOptions.title(googlePlace.getName());
-                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                                currentMarker = mMap.addMarker(markerOptions);
-
-                                pickingLocation = currentMarker.getPosition();
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
-
-                                progressDialog.dismiss();
-                            }
-                        });
-                        try {
-                            findPlace.execute();
-                            alertDialog.dismiss();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                        hideKeyboard(v);
+                        alertDialog.dismiss();
+                        findPlaceByText(input);
                     }
                 });
                 btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        hideKeyboard(v);
                         alertDialog.dismiss();
                     }
                 });
@@ -758,5 +796,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocation = location;
     }
 
-
+    void hideKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

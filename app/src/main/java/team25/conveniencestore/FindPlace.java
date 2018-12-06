@@ -88,6 +88,7 @@ public class FindPlace {
             try {
                 Log.d("DataParser","jsonobject ="+jsonString);
                 JSONObject jsonCandidates = new JSONObject(jsonString);
+                GooglePlace googlePlace = null;
                 if (jsonCandidates.get("status").toString().equalsIgnoreCase("OK")){
                     JSONArray jsonArray = jsonCandidates.getJSONArray("candidates");
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -96,10 +97,9 @@ public class FindPlace {
                     String name = jsonObject.getString("name");
                     String address = jsonObject.getString("formatted_address");
 
-                    GooglePlace googlePlace = new GooglePlace("0", name, address, new LatLng(lat, lng), 0);
-                    findPlaceListener.onFindPlaceSuccess(googlePlace);
+                    googlePlace = new GooglePlace("0", name, address, new LatLng(lat, lng), 0);
                 }
-
+                findPlaceListener.onFindPlaceSuccess(googlePlace);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
