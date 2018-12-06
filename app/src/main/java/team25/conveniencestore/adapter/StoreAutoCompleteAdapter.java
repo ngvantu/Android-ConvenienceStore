@@ -30,10 +30,13 @@ public class StoreAutoCompleteAdapter extends ArrayAdapter<StoreItemAutoComplete
     private void filterStoreList() {
         storeListFull = new ArrayList<>();
         storeListFull.add(new StoreItemAutoComplete("Tất cả", Color.TRANSPARENT));
+        storeListFull.add(new StoreItemAutoComplete("7-Eleven", R.drawable.logo_store_7eleven));
         storeListFull.add(new StoreItemAutoComplete("B's Mart", R.drawable.logo_store_bsmart));
+        storeListFull.add(new StoreItemAutoComplete("Bách hóa xanh", R.drawable.logo_store_bachhoaxanh));
         storeListFull.add(new StoreItemAutoComplete("Circle K", R.drawable.logo_store_circlek));
         storeListFull.add(new StoreItemAutoComplete("Family Mart", R.drawable.logo_store_familymart));
         storeListFull.add(new StoreItemAutoComplete("Ministop", R.drawable.logo_store_ministop));
+        storeListFull.add(new StoreItemAutoComplete("Shop & Go", R.drawable.logo_store_shopandgo));
         storeListFull.add(new StoreItemAutoComplete("Vinmart+", R.drawable.logo_store_vinmart));
     }
 
