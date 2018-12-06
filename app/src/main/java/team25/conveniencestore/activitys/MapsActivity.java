@@ -65,6 +65,7 @@ import team25.conveniencestore.fragments.DialogResultStores;
 import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
+import team25.conveniencestore.interfaces.FindPlaceListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
@@ -83,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
     private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle;
     private AutoCompleteTextView mSearchText;
-    private Marker marker;
+    private Marker currentMarker;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
@@ -487,11 +488,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Toast.makeText(getApplicationContext(), "Chưa nhập địa điểm", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input);
+                        FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input, new FindPlaceListener() {
+                            @Override
+                            public void onFindPlaceStart() {
+                                progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm địa điểm", true);
+                            }
+
+                            @Override
+                            public void onFindPlaceSuccess(GooglePlace googlePlace) {
+                                if (pickingLocation != null) {
+                                    currentMarker.remove();
+                                }
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.position(googlePlace.getLatLng());
+                                markerOptions.title(googlePlace.getName());
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                currentMarker = mMap.addMarker(markerOptions);
+
+                                pickingLocation = currentMarker.getPosition();
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
+
+                                progressDialog.dismiss();
+                            }
+                        });
                         try {
                             findPlace.execute();
-                            pickingLocation = mMap.getCameraPosition().target;
-                            showFavoriteStores();
                             alertDialog.dismiss();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -736,5 +757,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         currentLocation = location;
     }
+
 
 }

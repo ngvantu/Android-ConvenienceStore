@@ -22,6 +22,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import team25.conveniencestore.interfaces.FindPlaceListener;
+import team25.conveniencestore.models.GooglePlace;
+
 public class FindPlace {
 
     private static final String URL_API = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=";
@@ -29,11 +32,13 @@ public class FindPlace {
     private String keyWord;
     private GoogleMap mMap;
     private Context context;
+    private FindPlaceListener findPlaceListener;
 
-    public FindPlace(Context context, GoogleMap mMap, String keyWord){
+    public FindPlace(Context context, GoogleMap mMap, String keyWord, FindPlaceListener findPlaceListener){
         this.context = context;
         this.mMap = mMap;
         this.keyWord = keyWord;
+        this.findPlaceListener = findPlaceListener;
     }
 
     private String createURL() throws UnsupportedEncodingException {
@@ -45,6 +50,7 @@ public class FindPlace {
 
     public void execute() throws UnsupportedEncodingException {
         String url = createURL();
+        findPlaceListener.onFindPlaceStart();
         new DownloadRawData().execute(mMap, url);
     }
 
@@ -90,13 +96,8 @@ public class FindPlace {
                     String name = jsonObject.getString("name");
                     String address = jsonObject.getString("formatted_address");
 
-                    mMap.clear();
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(lat, lng))
-                            .title(name)
-                            .snippet(address);
-                    mMap.addMarker(markerOptions);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15f));
+                    GooglePlace googlePlace = new GooglePlace("0", name, address, new LatLng(lat, lng), 0);
+                    findPlaceListener.onFindPlaceSuccess(googlePlace);
                 }
 
             } catch (JSONException e) {
