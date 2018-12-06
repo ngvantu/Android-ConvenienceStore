@@ -40,7 +40,7 @@ public class FindPlace {
         String urlKeyWord = URLEncoder.encode(keyWord, "utf-8");
         return URL_API + urlKeyWord
                 + "&inputtype=textquery&fields=formatted_address,name,geometry&key="
-                + context.getResources().getString(R.string.find_place_api_key);
+                + context.getResources().getString(R.string.google_maps_key);
     }
 
     public void execute() throws UnsupportedEncodingException {

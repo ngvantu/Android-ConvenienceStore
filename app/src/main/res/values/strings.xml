@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConvenienceStore</string>
+    <string name="app_name">KonbiniMap</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="title_activity_google_sign_in">Sign in</string>

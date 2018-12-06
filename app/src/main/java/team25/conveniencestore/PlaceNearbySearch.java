@@ -58,7 +58,7 @@ public class PlaceNearbySearch {
                 + "&rankby=distance"
                 + "&type=" + TYPE_NEARBY_PLACE
                 + "&keyword=" + urlKeyWord
-                + "&key=" + context.getResources().getString(R.string.places_api_key);
+                + "&key=" + context.getResources().getString(R.string.google_maps_key);
     }
 
     private class DownloadRawData extends AsyncTask<Object, String, String> {

@@ -29,7 +29,7 @@ public class PlaceInfoActivity extends AppCompatActivity {
     private static final String TAG = "PlaceInfoActivity";
     private ViewPager mViewPager;
 
-    String API_KEY = "AIzaSyDVFmBKLQHSndjqgqRfU_7JpWS-imp2n40";
+    String API_KEY = "AIzaSyBKTFVy1RkiGaN8mmHuvlBXoFKf3DgNVpw";
 
     String placeID;
 
