@@ -34,10 +34,10 @@ public class DialogResultStores extends DialogFragment{
 
         if (getArguments() != null) {
             bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, getArguments().getParcelableArrayList(ResultStoresFragment.LIST_RESULTS));
-            bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, getArguments().getParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES));
+            //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, getArguments().getParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES));
         }
         tab1.setArguments(bundle);
-        tab2.setArguments(bundle);
+        //tab2.setArguments(bundle);
         adapter.addFragment(tab1, "Kết quả");
         adapter.addFragment(tab2, "Yêu thích");
         viewPager.setAdapter(adapter);

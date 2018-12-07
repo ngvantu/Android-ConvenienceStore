@@ -79,7 +79,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout drawerLayout;
     private GoogleMap mMap;
     private Button btnFindPath;
-    private Button btnSearch;
     private FloatingActionButton btnSearchNearMe;
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
@@ -92,6 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<GooglePlace> resultStores = new ArrayList<>();
     private List<GooglePlace> favoriteStores = new ArrayList<>();
+    private List<Marker> resultMarkers = new ArrayList<>();
+    private List<Marker> favoriteMarkers = new ArrayList<>();
 
     private ProgressDialog progressDialog;
 
@@ -221,15 +222,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 placeNearbySearch = new PlaceNearbySearch(this, currentLocation.getLatitude(), currentLocation.getLongitude(), keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
-                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần bạn!", true);
+                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm các cửa hàng gần bạn...!", true);
                     }
 
                     @Override
                     public void onSearchStoresSuccess(List<GooglePlace> results) {
                         resultStores.clear();
                         resultStores.addAll(results);
-                        notifyChangedMapData(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        for (Marker marker : resultMarkers) {
+                            marker.remove();
+                        }
+                        showNearbyPlaces(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng!", Toast.LENGTH_SHORT).show();
                         showDialogResultStores();
                     }
                 });
@@ -254,15 +259,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 placeNearbySearch = new PlaceNearbySearch(this, pickingLocation.latitude, pickingLocation.longitude, keyWord, new SearchStoresListener() {
                     @Override
                     public void onSearchStoresStart() {
-                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm các cửa hàng gần vị trí đã chọn", true);
+                        progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm các cửa hàng gần vị trí đã chọn...!", true);
                     }
 
                     @Override
                     public void onSearchStoresSuccess(List<GooglePlace> results) {
                         resultStores.clear();
                         resultStores.addAll(results);
-                        notifyChangedMapData(pickingLocation);
+                        for (Marker marker : resultMarkers) {
+                            marker.remove();
+                        }
+                        showNearbyPlaces(pickingLocation);
                         progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng!", Toast.LENGTH_SHORT).show();
                         showDialogResultStores();
                     }
                 });
@@ -295,7 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.title(placeName + " : " + vicinity);
             markerOptions.snippet(placeID);
 
-            mMap.addMarker(markerOptions);
+            resultMarkers.add(mMap.addMarker(markerOptions));
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
     }
@@ -328,7 +337,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FindPlace findPlace = new FindPlace(getApplicationContext(), mMap, input, new FindPlaceListener() {
             @Override
             public void onFindPlaceStart() {
-                progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi", "Đang tìm địa điểm", true);
+                progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm địa điểm...!", true);
             }
 
             @Override
@@ -358,15 +367,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void showPickingLocation() {
-        if (pickingLocation == null)
-            return;
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(pickingLocation);
-
-        mMap.addMarker(markerOptions);
-    }
-
     private void showFavoriteStores() {
         GooglePlacesViewModel viewModel = ViewModelProviders.of(this).get(GooglePlacesViewModel.class);
         favoriteStores.clear();
@@ -385,27 +385,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.title(placeName + " : " + vicinity);
             markerOptions.snippet(placeID);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-            mMap.addMarker(markerOptions);
+            favoriteMarkers.add(mMap.addMarker(markerOptions));
         }
     }
 
-    private void notifyChangedMapData(LatLng pickingLocation) {
-        mMap.clear();
-        showPickingLocation();
-        showNearbyPlaces(pickingLocation);
-        showFavoriteStores();
-    }
-
     private void showDialogResultStores() {
-        Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng", Toast.LENGTH_SHORT).show();
-        /*
-        if (resultStores.isEmpty()) {
-            return;
-        }*/
         DialogResultStores dialogResultStores = new DialogResultStores();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
-        bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
+        //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
         dialogResultStores.setArguments(bundle);
         dialogResultStores.show(getSupportFragmentManager(), "DialogResultStores");
     }
@@ -444,7 +432,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
 
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
         btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
         btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
         btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
@@ -470,7 +457,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handle = false;
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchPlacesNearMe();
+                    if (pickingLocation == null) {
+                        searchPlacesNearMe();
+                    } else {
+                        searchPlacesNearPosition();
+                    }
                     handle = true;
                 }
                 return handle;
@@ -496,7 +487,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                searchPlacesNearPosition();
+                if (pickingLocation == null) {
+                    searchPlacesNearMe();
+                } else {
+                    searchPlacesNearPosition();
+                }
             }
         });
 
@@ -574,12 +569,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         */
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchPlacesNearPosition();
-            }
-        });
 
         btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -613,7 +602,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapsActivity.this, "Da click", Toast.LENGTH_SHORT).show();
                 if (!moveBack) {
                     Show();
                     moveBack = !moveBack;
@@ -683,8 +671,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
+        progressDialog = ProgressDialog.show(this, "Vui lòng đợi!",
+                "Đang tìm đường đi...!", true);
 
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {

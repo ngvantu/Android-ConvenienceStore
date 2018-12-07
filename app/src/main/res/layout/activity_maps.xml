@@ -82,15 +82,8 @@
                     android:background="@drawable/white_border"
                     android:padding="5dp"
                     android:text="Tìm tại địa điểm"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
-                <Button
-                    android:id="@+id/btnSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Search"
-                    android:layout_toRightOf="@+id/btnFindPlace"/>
             </RelativeLayout>
 
             <LinearLayout
