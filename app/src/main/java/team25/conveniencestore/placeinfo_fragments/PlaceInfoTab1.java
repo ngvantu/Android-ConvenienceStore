@@ -27,6 +27,9 @@ public class PlaceInfoTab1 extends Fragment {
         txtAddr.setText(getArguments().getString("STORE_ADDRESS"));
         txtPhone.setText(getArguments().getString("STORE_PHONE"));
 
+        if(txtPhone.getText().toString().equals(""))
+            txtPhone.setText("(No information)");
+
         return view;
     }
 }

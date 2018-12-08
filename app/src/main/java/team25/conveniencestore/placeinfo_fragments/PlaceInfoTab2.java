@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class PlaceInfoTab2 extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private TextView txtRating;
     private RatingBar ratingBar;
+    private TextView txtNoComment;
 
     @Nullable
     @Override
@@ -39,7 +41,6 @@ public class PlaceInfoTab2 extends Fragment {
         ratingBar.setRating((float) getArguments().getDouble("RATING"));
 
         try {
-
             JSONArray jsonReviews = new JSONArray(getArguments().getString("REVIEWS"));
 
             recyclerView = view.findViewById(R.id.recycler_google_comment);
@@ -48,7 +49,6 @@ public class PlaceInfoTab2 extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
             mAdapter = new CommentAdapter(jsonReviews);
             recyclerView.setAdapter(mAdapter);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
