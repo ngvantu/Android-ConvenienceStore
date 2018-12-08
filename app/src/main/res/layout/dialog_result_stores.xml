@@ -6,6 +6,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Chỉ đường"
+            android:layout_marginStart="20dp"/>
+
+        <RadioButton
+            android:id="@+id/radInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xem thông tin"
+            android:layout_marginStart="40dp"/>
+    </RadioGroup>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/dlg_tablayout"
         android:layout_width="match_parent"

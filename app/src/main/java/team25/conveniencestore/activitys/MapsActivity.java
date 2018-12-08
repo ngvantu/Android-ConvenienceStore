@@ -18,6 +18,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
@@ -64,13 +66,13 @@ import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragment.menu_tab1;
 import team25.conveniencestore.fragments.DialogResultStores;
-import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.FindPlaceListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
+import team25.conveniencestore.models.SharedViewModel;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -105,6 +107,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location currentLocation;
     private LatLng pickingLocation = null;
 
+    private SharedViewModel sharedViewModel;
+    DialogResultStores dialogResultStores;
+
     private boolean moveBack = false;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
@@ -135,6 +140,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setNavigation();
 
+        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        sharedViewModel.getText().observe(this, new android.arch.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Log.d("SharedViewModel", s);
+                dialogResultStores.dismiss();
+            }
+        });
     }
 
     private void setNavigation() {
@@ -390,7 +403,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showDialogResultStores() {
-        DialogResultStores dialogResultStores = new DialogResultStores();
+        dialogResultStores = new DialogResultStores();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
         //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);

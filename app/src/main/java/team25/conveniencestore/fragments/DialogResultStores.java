@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import team25.conveniencestore.R;
 import team25.conveniencestore.placeinfo_fragments.SectionsPageAdapter;
@@ -24,6 +25,8 @@ public class DialogResultStores extends DialogFragment{
         View mView = inflater.inflate(R.layout.dialog_result_stores, container, false);
 
         SectionsPageAdapter adapter = new SectionsPageAdapter(getChildFragmentManager());
+
+        RadioGroup radioGroup = mView.findViewById(R.id.radioGroup);
 
         TabLayout tabLayout = mView.findViewById(R.id.dlg_tablayout);
         ViewPager viewPager = mView.findViewById(R.id.dlg_viewpager);
