@@ -89,7 +89,7 @@
                     android:src="@drawable/ic_direction"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="50dp"
-                    android:visibility="visible"/>
+                    android:visibility="invisible"/>
             </RelativeLayout>
 
             <fragment

@@ -88,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
     private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle;
     private AutoCompleteTextView mSearchText;
+    private Marker clickingMarker;
     private Marker currentMarker;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
@@ -109,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng pickingLocation = null;
 
     private SharedViewModel sharedViewModel;
-    DialogResultStores dialogResultStores;
+    private DialogResultStores dialogResultStores;
 
     private boolean moveBack = false;
 
@@ -431,6 +432,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (clickingMarker != null && latLng != clickingMarker.getPosition()) {
+                    btnFindPath.setVisibility(View.INVISIBLE);
+                    clickingMarker = null;
+                }
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                btnFindPath.setVisibility(View.VISIBLE);
+                clickingMarker = marker;
+                return false;
+            }
+        });
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
