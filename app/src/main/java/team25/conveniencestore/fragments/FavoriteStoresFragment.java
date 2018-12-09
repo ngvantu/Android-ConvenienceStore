@@ -47,13 +47,15 @@ public class FavoriteStoresFragment extends Fragment {
         ResultStoresAdapter rsAdapter = new ResultStoresAdapter(favoriteStores, new ResultStoresAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(int position) {
-                LatLng latLng = favoriteStores.get(position).getLatLng();
-                sharedViewModel.setText(latLng.latitude + "," + latLng.longitude);
-                /*
                 Intent i = new Intent(getActivity(), PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", favoriteStores.get(position).getId());
                 startActivity(i);
-                */
+            }
+
+            @Override
+            public void OnDirectionClick(int position) {
+                LatLng latLng = favoriteStores.get(position).getLatLng();
+                sharedViewModel.setText(latLng.latitude + "," + latLng.longitude);
             }
         });
         rcvResultStores.setAdapter(rsAdapter);

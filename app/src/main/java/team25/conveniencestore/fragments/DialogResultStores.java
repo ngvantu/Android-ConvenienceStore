@@ -26,8 +26,6 @@ public class DialogResultStores extends DialogFragment{
 
         SectionsPageAdapter adapter = new SectionsPageAdapter(getChildFragmentManager());
 
-        RadioGroup radioGroup = mView.findViewById(R.id.radioGroup);
-
         TabLayout tabLayout = mView.findViewById(R.id.dlg_tablayout);
         ViewPager viewPager = mView.findViewById(R.id.dlg_viewpager);
         Fragment tab1 = new ResultStoresFragment();
