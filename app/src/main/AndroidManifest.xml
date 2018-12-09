@@ -55,11 +55,6 @@
             android:name=".activitys.PlaceInfoActivity"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".fragment.menu_tab1"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".fragment.menu_tab2" />
-        <activity android:name=".fragment.menu_tab5"></activity>
     </application>
 
 </manifest>
