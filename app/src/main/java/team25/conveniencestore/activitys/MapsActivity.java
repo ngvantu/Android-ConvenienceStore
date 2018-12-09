@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
+import team25.conveniencestore.DirectionFinder;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
@@ -146,6 +147,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onChanged(@Nullable String s) {
                 Log.d("SharedViewModel", s);
                 dialogResultStores.dismiss();
+                String origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+
+                sendRequest(origin, s);
             }
         });
     }
@@ -202,10 +206,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 */
-    /*
-    private void sendRequest() {
-        String origin = mSearchText.getText().toString();
-        String destination = mSearchText.getText().toString();
+
+    private void sendRequest(String origin, String destination) {
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -216,12 +218,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         try {
-            new DirectionFinder(this, origin, destination).execute();
+            new DirectionFinder(this, this, origin, destination).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
-    */
+
 
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
@@ -715,7 +717,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-
+            /*
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
                     .title(route.startAddress)
@@ -724,11 +726,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
-
+            */
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.BLUE).
-                    width(10);
+                    width(12);
 
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));

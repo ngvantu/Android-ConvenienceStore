@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import team25.conveniencestore.R;
@@ -42,7 +44,8 @@ public class ResultStoresFragment extends Fragment {
         ResultStoresAdapter rsAdapter = new ResultStoresAdapter(resultStores, new ResultStoresAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(int position) {
-                sharedViewModel.setText(resultStores.get(position).getId());
+                LatLng latLng = resultStores.get(position).getLatLng();
+                sharedViewModel.setText(latLng.latitude + "," + latLng.longitude);
                 /*
                 Intent i = new Intent(getActivity(), PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", resultStores.get(position).getId());
