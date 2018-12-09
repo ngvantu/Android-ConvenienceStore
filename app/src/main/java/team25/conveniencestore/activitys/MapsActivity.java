@@ -148,7 +148,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onChanged(@Nullable String s) {
                 Log.d("SharedViewModel", s);
                 dialogResultStores.dismiss();
-                String origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+                String origin = null;
+                if (pickingLocation != null) {
+                    origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+                } else if (currentLocation != null){
+                    origin = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
+                } else {
+                    Toast.makeText(MapsActivity.this, "Không xác định được vị trí bắt đầu!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 sendRequest(origin, s);
             }
@@ -525,6 +533,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else {
                     searchPlacesNearPosition();
                 }
+            }
+        });
+
+        btnFindPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String origin = null;
+                if (pickingLocation != null) {
+                    origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+                } else if (currentLocation != null){
+                    origin = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
+                } else {
+                    Toast.makeText(MapsActivity.this, "Không xác định được vị trí bắt đầu!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String destination = clickingMarker.getPosition().latitude + "," + clickingMarker.getPosition().longitude;
+                sendRequest(origin, destination);
             }
         });
 
