@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
         TextView address;
         TextView star;
         RatingBar ratingBar;
+        ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -31,6 +34,13 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
             address = itemView.findViewById(R.id.dlg_store_adress);
             star = itemView.findViewById(R.id.dlg_store_star);
             ratingBar = itemView.findViewById(R.id.dlg_ratingbar);
+            imageView = itemView.findViewById(R.id.dlg_store_direction);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.OnDirectionClick(getAdapterPosition());
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,5 +84,6 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
 
     public interface OnItemClickListener {
         void OnItemClick(int position);
+        void OnDirectionClick(int position);
     }
 }

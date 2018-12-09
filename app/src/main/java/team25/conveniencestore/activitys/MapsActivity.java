@@ -22,8 +22,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+<<<<<<< HEAD
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+=======
+import android.util.Log;
+>>>>>>> 5f7207e4d3156afee287cb8a46a320ba52e5a27a
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,8 +65,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Locale;
+=======
+import java.util.Observer;
+>>>>>>> 5f7207e4d3156afee287cb8a46a320ba52e5a27a
 
+import team25.conveniencestore.DirectionFinder;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
@@ -73,13 +82,13 @@ import team25.conveniencestore.fragment.menu_tab1;
 import team25.conveniencestore.fragment.menu_tab2;
 import team25.conveniencestore.fragment.menu_tab5;
 import team25.conveniencestore.fragments.DialogResultStores;
-import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.FindPlaceListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
+import team25.conveniencestore.models.SharedViewModel;
 
 public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -87,13 +96,14 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
 
     private DrawerLayout drawerLayout;
     private GoogleMap mMap;
-    private Button btnFindPath;
+    private ImageButton btnFindPath;
     private FloatingActionButton btnSearchNearMe;
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
     private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle;
     private AutoCompleteTextView mSearchText;
+    private Marker clickingMarker;
     private Marker currentMarker;
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
@@ -113,6 +123,9 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
 
     private Location currentLocation;
     private LatLng pickingLocation = null;
+
+    private SharedViewModel sharedViewModel;
+    private DialogResultStores dialogResultStores;
 
     private boolean moveBack = false;
 
@@ -146,6 +159,25 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
 
         setNavigation();
 
+        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        sharedViewModel.getText().observe(this, new android.arch.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Log.d("SharedViewModel", s);
+                dialogResultStores.dismiss();
+                String origin = null;
+                if (pickingLocation != null) {
+                    origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+                } else if (currentLocation != null){
+                    origin = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
+                } else {
+                    Toast.makeText(MapsActivity.this, "Không xác định được vị trí bắt đầu!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                sendRequest(origin, s);
+            }
+        });
     }
 
     private void setNavigation() {
@@ -265,11 +297,17 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
 
         alertDialog.show();
     }
+<<<<<<< HEAD
 
     /*
     private void sendRequest() {
         String origin = mSearchText.getText().toString();
         String destination = mSearchText.getText().toString();
+=======
+*/
+
+    private void sendRequest(String origin, String destination) {
+>>>>>>> 5f7207e4d3156afee287cb8a46a320ba52e5a27a
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -280,12 +318,12 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
         }
 
         try {
-            new DirectionFinder(this, origin, destination).execute();
+            new DirectionFinder(this, this, origin, destination).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
-    */
+
 
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
@@ -467,7 +505,7 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
     }
 
     private void showDialogResultStores() {
-        DialogResultStores dialogResultStores = new DialogResultStores();
+        dialogResultStores = new DialogResultStores();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
         //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
@@ -493,6 +531,23 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (clickingMarker != null && latLng != clickingMarker.getPosition()) {
+                    btnFindPath.setVisibility(View.INVISIBLE);
+                    clickingMarker = null;
+                }
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                btnFindPath.setVisibility(View.VISIBLE);
+                clickingMarker = marker;
+                return false;
+            }
+        });
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -508,7 +563,7 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
     private void mappingController() {
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
 
-        btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btnFindPath = (ImageButton) findViewById(R.id.btnFindPath);
         btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
         btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
         btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
@@ -569,6 +624,24 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
                 } else {
                     searchPlacesNearPosition();
                 }
+            }
+        });
+
+        btnFindPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String origin = null;
+                if (pickingLocation != null) {
+                    origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+                } else if (currentLocation != null){
+                    origin = currentLocation.getLatitude() + "," + currentLocation.getLongitude();
+                } else {
+                    Toast.makeText(MapsActivity.this, "Không xác định được vị trí bắt đầu!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String destination = clickingMarker.getPosition().latitude + "," + clickingMarker.getPosition().longitude;
+                sendRequest(origin, destination);
             }
         });
 
@@ -637,15 +710,6 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
                 });
             }
         });
-        /*
-        btnFindPath.setEnabled(false);
-        btnFindPath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequest();
-            }
-        });
-        */
 
         btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -779,7 +843,7 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-
+            /*
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
                     .title(route.startAddress)
@@ -788,11 +852,11 @@ public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity impleme
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
-
+            */
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.BLUE).
-                    width(10);
+                    width(12);
 
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));
