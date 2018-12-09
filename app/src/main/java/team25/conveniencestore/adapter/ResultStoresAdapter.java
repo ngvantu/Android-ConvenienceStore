@@ -71,7 +71,6 @@ public class ResultStoresAdapter extends RecyclerView.Adapter<ResultStoresAdapte
         viewHolder.address.setText(resultStores.get(i).getVicinity());
         viewHolder.star.setText(String.valueOf(resultStores.get(i).getRating()));
         viewHolder.ratingBar.setRating(Float.valueOf(String.valueOf(resultStores.get(i).getRating())));
-        viewHolder.imageView.setImageResource(R.drawable.ic_direction);
         LayerDrawable stars = (LayerDrawable) viewHolder.ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);

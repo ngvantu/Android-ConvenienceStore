@@ -81,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private DrawerLayout drawerLayout;
     private GoogleMap mMap;
-    private Button btnFindPath;
+    private ImageButton btnFindPath;
     private FloatingActionButton btnSearchNearMe;
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
@@ -446,7 +446,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void mappingController() {
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
 
-        btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        btnFindPath = (ImageButton) findViewById(R.id.btnFindPath);
         btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
         btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
         btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
@@ -575,15 +575,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
             }
         });
-        /*
-        btnFindPath.setEnabled(false);
-        btnFindPath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequest();
-            }
-        });
-        */
 
         btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
             @Override
