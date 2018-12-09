@@ -6,6 +6,7 @@
     android:paddingTop="20dp"
     android:theme="@style/AppTheme.NoActionBar">
 
+    <!--
     <LinearLayout
         android:id="@+id/home_1"
         android:layout_width="match_parent"
@@ -107,5 +108,9 @@
         android:layout_height="0.5dp"
         android:layout_gravity="right"
         android:background="#CCC" />
+
+-->
+
+
 
 </LinearLayout>

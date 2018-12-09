@@ -26,5 +26,6 @@ public class menu_tab1 extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.menu_tab1_tab);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 }

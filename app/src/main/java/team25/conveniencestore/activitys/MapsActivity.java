@@ -5,8 +5,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -18,6 +22,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +61,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
@@ -63,6 +70,8 @@ import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragment.menu_tab1;
+import team25.conveniencestore.fragment.menu_tab2;
+import team25.conveniencestore.fragment.menu_tab5;
 import team25.conveniencestore.fragments.DialogResultStores;
 import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
@@ -72,7 +81,7 @@ import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+public class MapsActivity extends /*FragmentActivity*/ AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         DirectionFinderListener, LocationListener {
 
@@ -130,6 +139,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        loadLocale();
         super.onCreate(savedInstanceState);
         Initalize();
 
@@ -157,16 +168,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 startActivity(intent);
                                 break;
                             case R.id.tab2:
-
+                                Intent intent1 = new Intent(MapsActivity.this, FeedbackActivity.class);
+                                startActivity(intent1);
                                 break;
                             case R.id.tab3:
 
                                 break;
                             case R.id.tab4:
+                                // change language
 
+                                showChangeLaguageDialog();
                                 break;
                             case R.id.tab5:
-
+                                initview();
                                 break;
                         }
                         drawerLayout.closeDrawers();
@@ -179,16 +193,79 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
 
     }
-/*
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+
+    private void showChangeLaguageDialog() {
+
+        final  String[] listname = {"English"};
+        AlertDialog.Builder builder =  new AlertDialog.Builder(MapsActivity.this);
+
+        builder.setTitle("Choose your language...");
+        builder.setSingleChoiceItems(listname, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which)
+                {
+                    case 0:
+                        setlocate("en");
+                        recreate();
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        // show dialog
+        dialog.show();
     }
-*/
+
+    //for nav-tab4
+    private void setlocate(String en) {
+        Locale locale = new Locale(en);
+        locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+
+        //save data to shared
+
+        SharedPreferences.Editor editor = getSharedPreferences("setting", MODE_PRIVATE).edit();
+        editor.putString("My_English", en);
+        editor.apply();
+    }
+
+    // Load language
+
+    public void loadLocale()
+    {
+        SharedPreferences preferences = getSharedPreferences("setting", MapsActivity.MODE_PRIVATE);
+        String language = preferences.getString("My_English", "");
+
+        setlocate(language);
+    }
+
+    //for nav-tab5
+    private void initview() {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        alertDialog.setMessage("CONVINIENCE MAP \n" +
+                "Bản đồ cửa hàng tiện lợi \n" + "\n"+
+                "* Phiên bản: 1.0.0 \n" +
+                "* Tác giả: Tú Nguyễn, Nghĩa Nguyễn, Tiến Nguyễn, Mập Nguyễn, Đức Tài \n" +
+                "- ĐH Khoa Học Tự Nhiên, ĐHQG Tp. Hồ Chí Minh \n" +
+                "* Ứng dụng được phát triển nhằm đáp ứng như cầu tìm kiếm của hàng tiện lợi nhanh chóng hơn, hiệu quả hơn");
+
+        alertDialog.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, "Đóng", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do nothing
+            }
+        });
+
+        alertDialog.show();
+    }
+
     /*
     private void sendRequest() {
         String origin = mSearchText.getText().toString();

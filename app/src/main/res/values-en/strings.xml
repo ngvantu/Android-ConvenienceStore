@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <resources>
     <string name="app_name">KonbiniMap</string>
-
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="title_activity_google_sign_in">Sign in</string>
@@ -18,17 +18,17 @@
     <string name="entry_find">Find</string>
     <string name="entry_title">Find Store</string>
     <string name="title_activity_place_info">PlaceInfoActivity</string>
-    <string name="tab_text_1">Tổng quan</string>
-    <string name="tab_text_2">Dữ liệu Google</string>
-    <string name="tab_text_3">Đánh giá</string>
+    <string name="tab_text_1">Overview</string>
+    <string name="tab_text_2">Google data</string>
+    <string name="tab_text_3">Evaluate</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="tab1">Lịch sử tìm kiếm</string>
-    <string name="tab2">Phản hồi của bạn</string>
-    <string name="tab3">Liên hệ(chua co)</string>
-    <string name="tab4">Ngôn ngữ(Language setting)</string>
-    <string name="tab5">Thông tin tác giả</string>
+    <string name="tab1">Search History</string>
+    <string name="tab2">Your feedback</string>
+    <string name="tab3">Contact (none)</string>
+    <string name="tab4">Language (Language setting)</string>
+    <string name="tab5">Author Information</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

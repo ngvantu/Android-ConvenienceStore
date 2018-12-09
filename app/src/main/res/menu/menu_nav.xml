@@ -9,28 +9,28 @@
             android:orderInCategory="100"
             android:title="@string/tab1"
             app:showAsAction="never"
-            android:icon="@drawable/ic_location"
+            android:icon="@drawable/ic_history"
             />
         <item
             android:id="@+id/tab2"
             android:orderInCategory="100"
             android:title="@string/tab2"
             app:showAsAction="never"
-            android:icon="@drawable/ic_timeline"/>
+            android:icon="@drawable/ic_feedback_35px"/>
 
         <item
             android:id="@+id/tab3"
             android:orderInCategory="100"
             android:title="@string/tab3"
             app:showAsAction="never"
-            android:icon="@drawable/ic_contribution"/>
+            android:icon="@drawable/ic_contacts"/>
 
         <item
             android:id="@+id/tab4"
             android:orderInCategory="100"
             android:title="@string/tab4"
             app:showAsAction="never"
-            android:icon="@drawable/ic_share_position"
+            android:icon="@drawable/ic_account"
             />
 
         <item
@@ -38,6 +38,6 @@
             android:orderInCategory="100"
             android:title="@string/tab5"
             app:showAsAction="never"
-            android:icon="@drawable/ic_directions"/>
+            android:icon="@drawable/ic_account"/>
     </group>
 </menu>

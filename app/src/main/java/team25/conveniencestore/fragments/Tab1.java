@@ -24,7 +24,7 @@ public class Tab1 extends Fragment {
     }
 
     private void editHome() {
-        mRootView.findViewById(R.id.home_1).setOnClickListener(new View.OnClickListener() {
+       /* mRootView.findViewById(R.id.home_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(),"Địa chỉ nhà 1",Toast.LENGTH_SHORT).show();
@@ -37,5 +37,9 @@ public class Tab1 extends Fragment {
                 Toast.makeText(getActivity(),"Địa chỉ nhà 2",Toast.LENGTH_SHORT).show();
             }
         });
+        */
+
+
+
     }
 }
