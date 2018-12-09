@@ -1,5 +1,6 @@
 package team25.conveniencestore.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import team25.conveniencestore.R;
@@ -20,12 +23,13 @@ import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.activitys.PlaceInfoActivity;
 import team25.conveniencestore.adapter.ResultStoresAdapter;
 import team25.conveniencestore.models.GooglePlace;
+import team25.conveniencestore.models.SharedViewModel;
 
 public class FavoriteStoresFragment extends Fragment {
     private static String TAG = "FavoriteStoresFragment";
     public static String LIST_FAVORITES = "LIST_FAVORITES";
     private List<GooglePlace> favoriteStores;
-
+    private SharedViewModel sharedViewModel;
 
     @Nullable
     @Override
@@ -47,10 +51,28 @@ public class FavoriteStoresFragment extends Fragment {
                 i.putExtra("PLACE_ID", favoriteStores.get(position).getId());
                 startActivity(i);
             }
+
+            @Override
+            public void OnDirectionClick(int position) {
+                LatLng latLng = favoriteStores.get(position).getLatLng();
+                sharedViewModel.setText(latLng.latitude + "," + latLng.longitude);
+            }
         });
         rcvResultStores.setAdapter(rsAdapter);
         rcvResultStores.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvResultStores.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        sharedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+
+            }
+        });
     }
 }

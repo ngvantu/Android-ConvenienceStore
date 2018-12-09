@@ -18,6 +18,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +56,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
+import team25.conveniencestore.DirectionFinder;
 import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
@@ -64,13 +67,13 @@ import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragment.menu_tab1;
 import team25.conveniencestore.fragments.DialogResultStores;
-import team25.conveniencestore.fragments.FavoriteStoresFragment;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.interfaces.FindPlaceListener;
 import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
+import team25.conveniencestore.models.SharedViewModel;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -105,6 +108,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location currentLocation;
     private LatLng pickingLocation = null;
 
+    private SharedViewModel sharedViewModel;
+    DialogResultStores dialogResultStores;
+
     private boolean moveBack = false;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
@@ -135,6 +141,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setNavigation();
 
+        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        sharedViewModel.getText().observe(this, new android.arch.lifecycle.Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Log.d("SharedViewModel", s);
+                dialogResultStores.dismiss();
+                String origin = pickingLocation.latitude + "," + pickingLocation.longitude;
+
+                sendRequest(origin, s);
+            }
+        });
     }
 
     private void setNavigation() {
@@ -189,10 +206,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 */
-    /*
-    private void sendRequest() {
-        String origin = mSearchText.getText().toString();
-        String destination = mSearchText.getText().toString();
+
+    private void sendRequest(String origin, String destination) {
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -203,12 +218,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         try {
-            new DirectionFinder(this, origin, destination).execute();
+            new DirectionFinder(this, this, origin, destination).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
-    */
+
 
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
@@ -390,7 +405,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showDialogResultStores() {
-        DialogResultStores dialogResultStores = new DialogResultStores();
+        dialogResultStores = new DialogResultStores();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(ResultStoresFragment.LIST_RESULTS, (ArrayList<? extends Parcelable>) resultStores);
         //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
@@ -702,7 +717,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-
+            /*
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
                     .title(route.startAddress)
@@ -711,11 +726,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
-
+            */
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.BLUE).
-                    width(10);
+                    width(12);
 
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));
