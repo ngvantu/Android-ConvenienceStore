@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/background_gradient"
     tools:context=".activitys.LoadingActivity">
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
-        app:ringColor="@android:color/darker_gray"
+        app:ringColor="@android:color/white"
         app:ringProgressColor="@color/colorPrimary"
         app:textColor="@android:color/white"
         app:textSize="20sp"

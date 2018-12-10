@@ -896,7 +896,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
-        alertDialog.setMessage("CONVINIENCE MAP \n" +
+        alertDialog.setMessage("Konbini Map\n" +
                 "Bản đồ cửa hàng tiện lợi \n" + "\n"+
                 "* Phiên bản: 1.0.0 \n" +
                 "* Tác giả: Tú Nguyễn, Nghĩa Nguyễn, Tiến Nguyễn, Mập Nguyễn, Đức Tài \n" +
