@@ -202,15 +202,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm các cửa hàng gần bạn...!", true);
+                        deletePolylinePaths();
+                        resultStores.clear();
+                        for (Marker marker : resultMarkers) {
+                            marker.remove();
+                        }
                     }
 
                     @Override
                     public void onSearchStoresSuccess(List<GooglePlace> results) {
-                        resultStores.clear();
                         resultStores.addAll(results);
-                        for (Marker marker : resultMarkers) {
-                            marker.remove();
-                        }
                         showNearbyPlaces(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng!", Toast.LENGTH_SHORT).show();
@@ -239,15 +240,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onSearchStoresStart() {
                         progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm các cửa hàng gần vị trí đã chọn...!", true);
+                        resultStores.clear();
+                        for (Marker marker : resultMarkers) {
+                            marker.remove();
+                        }
+                        deletePolylinePaths();
                     }
 
                     @Override
                     public void onSearchStoresSuccess(List<GooglePlace> results) {
-                        resultStores.clear();
                         resultStores.addAll(results);
-                        for (Marker marker : resultMarkers) {
-                            marker.remove();
-                        }
                         showNearbyPlaces(pickingLocation);
                         progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Tìm thấy " + resultStores.size() + " cửa hàng!", Toast.LENGTH_SHORT).show();
@@ -317,13 +319,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onFindPlaceStart() {
                 progressDialog = ProgressDialog.show(MapsActivity.this, "Vui lòng đợi!", "Đang tìm địa điểm...!", true);
+                deletePolylinePaths();
+                if (pickingLocation != null) {
+                    currentMarker.remove();
+                }
             }
 
             @Override
             public void onFindPlaceSuccess(GooglePlace googlePlace) {
-                if (pickingLocation != null) {
-                    currentMarker.remove();
-                }
                 if (googlePlace == null) {
                     Toast.makeText(MapsActivity.this, "Không tìm thấy địa điểm!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -336,6 +339,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     pickingLocation = currentMarker.getPosition();
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pickingLocation, 15f));
                 }
+
                 progressDialog.dismiss();
             }
         });
@@ -434,7 +438,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnDeleteInputSearchStore = (Button) findViewById(R.id.btnDeleteInputSearchStore);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
+
         floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
         Move_Left = AnimationUtils.loadAnimation(this, R.anim.move_bottom);
         Back_Left = AnimationUtils.loadAnimation(this, R.anim.back_bottom);
@@ -734,16 +738,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void Show() {
         floatingBTN.startAnimation(Rotate_X);
-        btnFeedback.startAnimation(Move_Left);
-        btnResult.startAnimation(Move_Middle);
-        btnSearchNearMe.startAnimation(Move_Above);
+        //btnFeedback.startAnimation(Move_Left);
+        btnResult.startAnimation(Move_Left);
+        //btnSearchNearMe.startAnimation(Move_Above);
     }
 
     private void Hide() {
         floatingBTN.startAnimation(Rotate_Plus);
-        btnResult.startAnimation(Back_Middle);
-        btnSearchNearMe.startAnimation(Back_Above);
-        btnFeedback.startAnimation(Back_Left);
+        btnResult.startAnimation(Back_Left);
+        //btnSearchNearMe.startAnimation(Back_Above);
+        //btnFeedback.startAnimation(Back_Left);
     }
 
     @Override
@@ -794,10 +798,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocation = location;
     }
 
-    void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void deletePolylinePaths() {
+        if (polylinePaths != null) {
+            for (Polyline polyline : polylinePaths) {
+                polyline.remove();
+            }
         }
     }
 
