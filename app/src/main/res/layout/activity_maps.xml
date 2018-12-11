@@ -106,15 +106,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="32dp"
-            android:backgroundTint="#999"
+            android:backgroundTint="#71c663"
             app:layout_constraintBottom_toBottomOf="@+id/include"
-            app:layout_constraintEnd_toEndOf="@+id/include"           />
+            app:layout_constraintEnd_toEndOf="@+id/include"
+            app:backgroundTint="@android:color/transparent"
+            app:fabCustomSize="50dp"/>
 
         <include
             android:id="@+id/include"
-            layout="@layout/floating_button_layout"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="63dp" />
+            layout="@layout/floating_button_layout" />
 
     </android.support.constraint.ConstraintLayout>
 

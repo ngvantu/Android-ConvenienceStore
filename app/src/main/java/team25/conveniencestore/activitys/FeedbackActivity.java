@@ -176,7 +176,6 @@ public class FeedbackActivity extends Activity {
 
                 etTitle.setText("");
                 etContent.setText("");
-                CallSignOut();
             } catch (Exception e) {
             }
         }

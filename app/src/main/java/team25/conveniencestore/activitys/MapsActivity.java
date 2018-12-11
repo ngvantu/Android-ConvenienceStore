@@ -92,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
-    private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle;
+    private Animation Move_Left, Back_Left, Move_Above, Back_Above, Move_Middle, Back_Middle,Rotate_X,Rotate_Plus;
     private AutoCompleteTextView mSearchText;
     private Marker clickingMarker;
     private Marker currentMarker;
@@ -436,12 +436,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
         floatingBTN = (FloatingActionButton) findViewById(R.id.floatingBTN);
-        Move_Left = AnimationUtils.loadAnimation(this, R.anim.move_left);
-        Back_Left = AnimationUtils.loadAnimation(this, R.anim.back_left);
+        Move_Left = AnimationUtils.loadAnimation(this, R.anim.move_bottom);
+        Back_Left = AnimationUtils.loadAnimation(this, R.anim.back_bottom);
         Move_Above = AnimationUtils.loadAnimation(this, R.anim.move_above);
         Back_Above = AnimationUtils.loadAnimation(this, R.anim.back_above);
         Move_Middle = AnimationUtils.loadAnimation(this, R.anim.move_middle);
         Back_Middle = AnimationUtils.loadAnimation(this, R.anim.back_middle);
+        Rotate_X = AnimationUtils.loadAnimation(this, R.anim.rotate_x);
+        Rotate_Plus = AnimationUtils.loadAnimation(this, R.anim.rotate_plus);
+
     }
 
     private void settingController() {
@@ -730,12 +733,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void Show() {
+        floatingBTN.startAnimation(Rotate_X);
         btnFeedback.startAnimation(Move_Left);
         btnResult.startAnimation(Move_Middle);
         btnSearchNearMe.startAnimation(Move_Above);
     }
 
     private void Hide() {
+        floatingBTN.startAnimation(Rotate_Plus);
         btnResult.startAnimation(Back_Middle);
         btnSearchNearMe.startAnimation(Back_Above);
         btnFeedback.startAnimation(Back_Left);

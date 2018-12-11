@@ -10,38 +10,48 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="220dp"
         android:backgroundTint="#fff"
+        android:scaleType="center"
+        android:src="@drawable/places_ic_search"
         android:text="Near"
+        android:tint="@color/fui_bgEmail"
         android:visibility="invisible"
-        android:src="@drawable/places_ic_search"/>
+        app:backgroundTint="@android:color/transparent"
+        app:fabCustomSize="50dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnResult"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:backgroundTint="#fff"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="110dp"
         android:layout_marginRight="32dp"
-        android:text="KQ"
-        android:visibility="invisible"
-        android:src="@drawable/ic_result_35px"
+        android:layout_marginBottom="160dp"
+        android:backgroundTint="#fff"
+        android:clickable="true"
+        android:padding="0dp"
         android:scaleType="center"
-        />
+        android:src="@drawable/ic_result_35px"
+        android:text="KQ"
+        android:tint="@color/fui_bgPhone"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabCustomSize="50dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnFeedback"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:backgroundTint="#fff"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="32dp"
-        android:layout_marginRight="110dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="#fff"
+        android:scaleType="center"
         android:src="@drawable/ic_feedback_35px"
         android:text="FB"
+        android:tint="@color/fui_linkColor"
         android:visibility="invisible"
-        android:scaleType="center"
-        />
+        app:backgroundTint="@android:color/transparent"
+        app:fabCustomSize="50dp" />
 
 </FrameLayout>
