@@ -38,9 +38,9 @@ public abstract class GooglePlacesDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            mDao.insertPlace( new GooglePlace(String.valueOf(1),"test place 1","he he", new LatLng(10.764006, 106.679985),4.6));
-            mDao.insertPlace( new GooglePlace(String.valueOf(2),"test place 2","he he", new LatLng(10.766620, 106.683096),4.8));
-            mDao.insertPlace( new GooglePlace(String.valueOf(3),"test place 3","he he", new LatLng(10.762615, 106.687130),3.9));
+            mDao.insertPlace( new GooglePlace(String.valueOf(1),"Cửa hàng 1","2a Trần Phú, Phường 4, Quận 5, Tp HCM", new LatLng(10.764006, 106.679985),4.6));
+            mDao.insertPlace( new GooglePlace(String.valueOf(2),"Cửa hàng 2","Nguyễn Thị Minh Khai, Tp HCM", new LatLng(10.766620, 106.683096),4.8));
+            mDao.insertPlace( new GooglePlace(String.valueOf(3),"Cửa hàng 3","179 Nguyễn Cư Trinh, Quận 1, Tp HCM", new LatLng(10.762615, 106.687130),3.9));
             return null;
         }
     }
