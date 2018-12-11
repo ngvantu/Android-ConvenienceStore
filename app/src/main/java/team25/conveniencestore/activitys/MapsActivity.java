@@ -88,6 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout drawerLayout;
     private GoogleMap mMap;
     private ImageButton btnFindPath;
+    private ImageButton btnDeleteMarker;
     private FloatingActionButton btnSearchNearMe;
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
@@ -188,7 +189,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
     private void searchPlacesNearMe() {
         String keyWord = mSearchText.getText().toString().trim();
         if (keyWord.isEmpty()) {
@@ -276,8 +276,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String placeID = googlePlace.getId();
 
             if (!makeMarkerIconForStore(markerOptions, placeName)) {
-                resultStores.remove(i);
-                --i;
+                resultStores.remove(i--);
                 continue;
             }
 
@@ -404,6 +403,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onMapClick(LatLng latLng) {
                 if (clickingMarker != null && latLng != clickingMarker.getPosition()) {
                     btnFindPath.setVisibility(View.INVISIBLE);
+                    btnDeleteMarker.setVisibility(View.INVISIBLE);
                     clickingMarker = null;
                 }
             }
@@ -411,7 +411,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                btnFindPath.setVisibility(View.VISIBLE);
+                Log.d("ClickMarker", marker.getPosition().toString());
+
+                if (currentMarker != null && marker.getPosition().latitude == currentMarker.getPosition().latitude
+                        && marker.getPosition().longitude == currentMarker.getPosition().longitude) {
+                    btnDeleteMarker.setVisibility(View.VISIBLE);
+                    btnFindPath.setVisibility(View.INVISIBLE);
+                } else {
+                    btnFindPath.setVisibility(View.VISIBLE);
+                    btnDeleteMarker.setVisibility(View.INVISIBLE);
+                }
                 clickingMarker = marker;
                 return false;
             }
@@ -419,7 +428,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if (marker.getPosition() == pickingLocation)
+                if (marker.getPosition().latitude == pickingLocation.latitude && marker.getPosition().longitude == pickingLocation.longitude)
                     return;
                 Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", marker.getSnippet());
@@ -432,6 +441,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnFindPlace = (Button) findViewById(R.id.btnFindPlace);
 
         btnFindPath = (ImageButton) findViewById(R.id.btnFindPath);
+        btnDeleteMarker = (ImageButton) findViewById(R.id.btnDeleteMarker);
         btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
         btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
         btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
@@ -513,6 +523,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 String destination = clickingMarker.getPosition().latitude + "," + clickingMarker.getPosition().longitude;
                 sendRequest(origin, destination);
+            }
+        });
+
+        btnDeleteMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentMarker.remove();
+                currentMarker = null;
+                pickingLocation = null;
             }
         });
 
