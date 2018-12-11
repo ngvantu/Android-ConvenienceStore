@@ -49,6 +49,12 @@ public class PlaceInfoTab3 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_info_tab3, container, false);
 
+        btnSend = (Button) view.findViewById(R.id.userSendButton);
+        ratingBar = (RatingBar) view.findViewById(R.id.firebaseRatingBar);
+        ratingPoint = (TextView) view.findViewById(R.id.firebaseRatingPoint);
+        userRatingBar = (RatingBar) view.findViewById(R.id.userRatingBar);
+        userComment = (EditText) view.findViewById(R.id.userComment);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("reviews");
@@ -63,7 +69,10 @@ public class PlaceInfoTab3 extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                float point = 4.4f;
                 mAdapter = new FirebaseCommentAdapter(dataSnapshot);
+                ratingBar.setRating(point);
+                ratingPoint.setText(String.valueOf(point) + "/5");
                 recyclerView.setAdapter(mAdapter);
             }
 
@@ -71,12 +80,6 @@ public class PlaceInfoTab3 extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
-        btnSend = (Button) view.findViewById(R.id.userSendButton);
-        ratingBar = (RatingBar) view.findViewById(R.id.firebaseRatingBar);
-        ratingPoint = (TextView) view.findViewById(R.id.firebaseRatingPoint);
-        userRatingBar = (RatingBar) view.findViewById(R.id.userRatingBar);
-        userComment = (EditText) view.findViewById(R.id.userComment);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,4 +101,17 @@ public class PlaceInfoTab3 extends Fragment {
         });
         return view;
     }
+
+//    public static float calAvgRatingPoint(DataSnapshot data) {
+//        float result = 0f;
+//        int i = 0;
+//
+//        for(DataSnapshot child : data.getChildren()) {
+//            result += (float) child.child("point").getValue();
+//            i++;
+//        }
+//
+//        return i == 0 ? 0f : (float) result / i;
+//    }
+
 }
