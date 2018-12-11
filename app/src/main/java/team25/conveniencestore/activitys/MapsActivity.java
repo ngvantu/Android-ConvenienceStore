@@ -300,13 +300,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if (storeName.toLowerCase().contains("vinmart")) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markervin));
         } else if (storeName.toLowerCase().contains("7-eleven")) {
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker7eleven));
         } else if (storeName.toLowerCase().contains("bách hóa xanh")) {
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerbachhoaxanh));
         } else if (storeName.toLowerCase().contains("shop")) {
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markershopgo));
         } else {
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerunknown));
             return false;
         }
         return true;
@@ -330,7 +330,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(googlePlace.getLatLng());
                     markerOptions.title(googlePlace.getName());
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerfrom));
                     currentMarker = mMap.addMarker(markerOptions);
 
                     pickingLocation = currentMarker.getPosition();
@@ -363,7 +363,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerOptions.position(latLng);
             markerOptions.title(placeName + " : " + vicinity);
             markerOptions.snippet(placeID);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.markerstar));
             favoriteMarkers.add(mMap.addMarker(markerOptions));
         }
     }
