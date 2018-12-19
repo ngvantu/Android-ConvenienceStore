@@ -428,7 +428,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if (marker.getPosition().latitude == pickingLocation.latitude && marker.getPosition().longitude == pickingLocation.longitude)
+                if (pickingLocation != null && marker.getPosition().latitude == pickingLocation.latitude && marker.getPosition().longitude == pickingLocation.longitude)
                     return;
                 Intent i = new Intent(MapsActivity.this, PlaceInfoActivity.class);
                 i.putExtra("PLACE_ID", marker.getSnippet());
