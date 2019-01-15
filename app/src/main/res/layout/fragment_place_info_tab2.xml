@@ -21,7 +21,10 @@
             android:isIndicator="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:rating="0"
+            android:numStars="5"
+            android:stepSize="0.1"/>
 
         <TextView
             android:id="@+id/googleRatingText"

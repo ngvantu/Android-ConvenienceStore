@@ -70,6 +70,7 @@ import team25.conveniencestore.FindPlace;
 import team25.conveniencestore.PlaceNearbySearch;
 import team25.conveniencestore.R;
 import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
+import team25.conveniencestore.adapter.InfoWindowAdapter;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
 import team25.conveniencestore.fragments.DialogResultStores;
@@ -413,6 +414,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
                 Log.d("ClickMarker", marker.getPosition().toString());
 
+                mMap.setInfoWindowAdapter(new InfoWindowAdapter(MapsActivity.this));
+
                 if (currentMarker != null && marker.getPosition().latitude == currentMarker.getPosition().latitude
                         && marker.getPosition().longitude == currentMarker.getPosition().longitude) {
                     btnDeleteMarker.setVisibility(View.VISIBLE);
@@ -589,6 +592,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         hideKeyboard(v);
                         alertDialog.dismiss();
                         findPlaceByText(input);
+
+                        // search immediately if having search text
+                        if (!mSearchText.getText().toString().trim().isEmpty()) {
+                            searchPlacesNearPosition();
+                        }
                     }
                 });
                 btnClose.setOnClickListener(new View.OnClickListener() {
