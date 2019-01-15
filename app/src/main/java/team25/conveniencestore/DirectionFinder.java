@@ -52,7 +52,8 @@ public class DirectionFinder {
 
         return DIRECTION_URL_API
                 + "origin=" + urlOrigin + "&destination=" + urlDestination
-                + "&key=" + context.getResources().getString(R.string.google_maps_key);
+                + "&key=" + context.getResources().getString(R.string.google_maps_key)
+                + "&language=vi";
     }
 
     private class DownloadRawData extends AsyncTask<String, Void, String> {

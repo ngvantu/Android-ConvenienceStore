@@ -73,6 +73,7 @@ import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
 import team25.conveniencestore.adapter.InfoWindowAdapter;
 import team25.conveniencestore.adapter.PlaceAutoCompleteAdapter;
 import team25.conveniencestore.adapter.StoreAutoCompleteAdapter;
+import team25.conveniencestore.fragments.DialogDirection;
 import team25.conveniencestore.fragments.DialogResultStores;
 import team25.conveniencestore.fragments.ResultStoresFragment;
 import team25.conveniencestore.interfaces.DirectionFinderListener;
@@ -81,6 +82,7 @@ import team25.conveniencestore.interfaces.SearchStoresListener;
 import team25.conveniencestore.models.GooglePlace;
 import team25.conveniencestore.models.Route;
 import team25.conveniencestore.models.SharedViewModel;
+import team25.conveniencestore.models.Step;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -105,6 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<GooglePlace> favoriteStores = new ArrayList<>();
     private List<Marker> resultMarkers = new ArrayList<>();
     private List<Marker> favoriteMarkers = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 
     private ProgressDialog progressDialog;
 
@@ -119,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private SharedViewModel sharedViewModel;
     private DialogResultStores dialogResultStores;
+    private DialogDirection dialogDirection;
 
     private boolean moveBack = false;
 
@@ -379,6 +383,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //bundle.putParcelableArrayList(FavoriteStoresFragment.LIST_FAVORITES, (ArrayList<? extends Parcelable>) favoriteStores);
         dialogResultStores.setArguments(bundle);
         dialogResultStores.show(getSupportFragmentManager(), "DialogResultStores");
+    }
+
+    private void showDialogDirection() {
+        dialogDirection = new DialogDirection();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(DialogDirection.LIST_STEPS, (ArrayList<? extends Parcelable>) steps);
+        dialogDirection.setArguments(bundle);
+        dialogDirection.show(getSupportFragmentManager(), "DialogDirection");
     }
 
     /**
@@ -760,7 +772,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 polylineOptions.add(route.points.get(i));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+
+            steps.addAll(route.steps);
         }
+        showDialogDirection();
     }
 
     private void Show() {
@@ -868,7 +883,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             case R.id.tab4:
                                 // change language
 
-                                showChangeLaguageDialog();
+                                showChangeLanguageDialog();
                                 break;
                             case R.id.tab5:
                                 initview();
@@ -885,7 +900,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void showChangeLaguageDialog() {
+    private void showChangeLanguageDialog() {
 
         final  String[] listname = {"English"};
         AlertDialog.Builder builder =  new AlertDialog.Builder(MapsActivity.this);
