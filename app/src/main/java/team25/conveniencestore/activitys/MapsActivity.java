@@ -168,12 +168,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return;
                 }
 
-                sendRequest(origin, s);
+                findPathDirection(origin, s);
             }
         });
     }
 
-    private void sendRequest(String origin, String destination) {
+    private void findPathDirection(String origin, String destination) {
         if (origin.isEmpty()) {
             Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
@@ -525,7 +525,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 String destination = clickingMarker.getPosition().latitude + "," + clickingMarker.getPosition().longitude;
-                sendRequest(origin, destination);
+                findPathDirection(origin, destination);
             }
         });
 

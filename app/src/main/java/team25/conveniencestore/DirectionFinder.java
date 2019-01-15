@@ -24,6 +24,7 @@ import team25.conveniencestore.interfaces.DirectionFinderListener;
 import team25.conveniencestore.models.Distance;
 import team25.conveniencestore.models.Duration;
 import team25.conveniencestore.models.Route;
+import team25.conveniencestore.models.Step;
 
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
@@ -108,6 +109,7 @@ public class DirectionFinder {
             JSONObject jsonDuration = jsonLeg.getJSONObject("duration");
             JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
             JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
+            JSONArray jsonSteps = jsonLeg.getJSONArray("steps");
 
             route.distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
             route.duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
@@ -116,6 +118,25 @@ public class DirectionFinder {
             route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
             route.points = decodePolyLine(overview_polylineJson.getString("points"));
+            route.steps = new ArrayList<>();
+
+            for (int j = 0; j < jsonSteps.length(); j++) {
+                JSONObject jsonStep = jsonSteps.getJSONObject(j);
+
+                JSONObject jsonStepDistance = jsonStep.getJSONObject("distance");
+                JSONObject jsonStepDuration = jsonStep.getJSONObject("duration");
+                JSONObject jsonStepStartLocation = jsonStep.getJSONObject("start_location");
+                JSONObject jsonStepEndLocation = jsonStep.getJSONObject("end_location");
+
+                Step step = new Step();
+                step.distance = new Distance(jsonStepDistance.getString("text"), jsonDistance.getInt("value"));
+                step.duration = new Duration(jsonStepDuration.getString("text"), jsonDuration.getInt("value"));
+                step.startLocation = new LatLng(jsonStepStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
+                step.endLocation = new LatLng(jsonStepEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
+                step.instructions = jsonStep.getString("html_instructions");
+
+                route.steps.add(step);
+            }
 
             routes.add(route);
         }
