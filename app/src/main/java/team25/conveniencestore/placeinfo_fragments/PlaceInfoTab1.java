@@ -9,7 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import team25.conveniencestore.R;
 
@@ -19,6 +24,7 @@ public class PlaceInfoTab1 extends Fragment {
     TextView txtName;
     TextView txtAddr;
     TextView txtPhone;
+    Button btnLike;
 
     @Nullable
     @Override
@@ -27,6 +33,7 @@ public class PlaceInfoTab1 extends Fragment {
         txtName = view.findViewById(R.id.store_name);
         txtAddr = view.findViewById(R.id.placeinfo_address);
         txtPhone = view.findViewById(R.id.placeinfo_phone);
+        btnLike = view.findViewById(R.id.btnLike);
 
         txtName.setText(getArguments().getString("STORE_NAME"));
         txtAddr.setText(getArguments().getString("STORE_ADDRESS"));
@@ -48,6 +55,23 @@ public class PlaceInfoTab1 extends Fragment {
                 }
             });
         }
+
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("favourites").push();
+
+                myRef.child("placeId").setValue(getArguments().getString("PLACE_ID"));
+                myRef.child("name").setValue(getArguments().getString("STORE_NAME"));
+                myRef.child("address").setValue(getArguments().getString("STORE_ADDRESS"));
+                myRef.child("lat").setValue(getArguments().getDouble("LAT"));
+                myRef.child("lng").setValue(getArguments().getDouble("LNG"));
+                myRef.child("rating").setValue(getArguments().getDouble("RATING"));
+
+                Toast.makeText(getActivity(), "Đã lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

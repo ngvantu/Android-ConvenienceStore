@@ -88,6 +88,7 @@ public class PlaceInfoActivity extends AppCompatActivity {
 
         if (jsonRes.get("status").toString().equalsIgnoreCase("OK")) {
             jsonRes = jsonRes.getJSONObject("result");
+            JSONObject jsonGeo = jsonRes.getJSONObject("geometry").getJSONObject("location");
 
             String jsonStringReviews = jsonRes.getJSONArray("reviews").toString();;
 
@@ -106,6 +107,8 @@ public class PlaceInfoActivity extends AppCompatActivity {
             bundle.putString("REVIEWS", jsonStringReviews);
             bundle.putDouble("RATING", jsonRes.getDouble("rating"));
             bundle.putString("PLACE_ID", placeID);
+            bundle.putDouble("LAT", jsonGeo.getDouble("lat"));
+            bundle.putDouble("LNG", jsonGeo.getDouble("lng"));
 
             tab1.setArguments(bundle);
             tab2.setArguments(bundle);

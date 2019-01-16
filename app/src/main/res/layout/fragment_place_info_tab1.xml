@@ -88,7 +88,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnLike"
         android:layout_width="120dp"
         android:layout_height="75dp"
         android:layout_marginStart="50dp"

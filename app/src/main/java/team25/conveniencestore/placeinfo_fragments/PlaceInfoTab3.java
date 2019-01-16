@@ -68,7 +68,6 @@ public class PlaceInfoTab3 extends Fragment {
                 int i = 0;
 
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.i("ABCDXYZ " + getArguments().getString("PLACE_ID"), child.child("point").getValue().toString());
                     String temp = child.child("point").getValue().toString();
                     float tempFloat = Float.valueOf(temp).floatValue();
                     point += tempFloat;
