@@ -92,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ImageButton btnFindPath;
     private ImageButton btnDeleteMarker;
-    private FloatingActionButton btnSearchNearMe;
+    private FloatingActionButton btnDirection;
     private FloatingActionButton btnResult, btnFeedback;
     private Button btnDeleteInputSearchStore;
     private FloatingActionButton floatingBTN, floatBtn_Result, floatBtn_FeedBack, floatBtn_Nearby;
@@ -457,7 +457,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnFindPath = (ImageButton) findViewById(R.id.btnFindPath);
         btnDeleteMarker = (ImageButton) findViewById(R.id.btnDeleteMarker);
-        btnSearchNearMe = (FloatingActionButton) findViewById(R.id.btnSearchNearMe);
+        btnDirection = (FloatingActionButton) findViewById(R.id.btnDirection);
         btnResult = (FloatingActionButton) findViewById(R.id.btnResult);
         btnFeedback = (FloatingActionButton) findViewById(R.id.btnFeedback);
 
@@ -621,10 +621,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        btnSearchNearMe.setOnClickListener(new View.OnClickListener() {
+        btnDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPlacesNearMe();
+                showDialogDirection();
             }
         });
 
@@ -782,13 +782,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         floatingBTN.startAnimation(Rotate_X);
         //btnFeedback.startAnimation(Move_Left);
         btnResult.startAnimation(Move_Left);
-        //btnSearchNearMe.startAnimation(Move_Above);
+        btnDirection.startAnimation(Move_Middle);
     }
 
     private void Hide() {
         floatingBTN.startAnimation(Rotate_Plus);
         btnResult.startAnimation(Back_Left);
-        //btnSearchNearMe.startAnimation(Back_Above);
+        btnDirection.startAnimation(Back_Middle);
         //btnFeedback.startAnimation(Back_Left);
     }
 

@@ -114,7 +114,7 @@
             android:src="@drawable/ic_add"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="32dp"
+            android:layout_margin="20dp"
             android:backgroundTint="#71c663"
             app:layout_constraintBottom_toBottomOf="@+id/include"
             app:layout_constraintEnd_toEndOf="@+id/include"

@@ -134,7 +134,7 @@ public class DirectionFinder {
                 step.duration = new Duration(jsonStepDuration.getString("text"), jsonDuration.getInt("value"));
                 step.startLocation = new LatLng(jsonStepStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
                 step.endLocation = new LatLng(jsonStepEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-                step.instructions = jsonStep.getString("html_instructions");
+                step.instructions = jsonStep.getString("html_instructions").replaceAll("<div.*?>", "\n").replaceAll("<(.*?)*>", "").replaceAll("&amp;","&");
 
                 route.steps.add(step);
             }
