@@ -8,6 +8,7 @@
     tools:context=".activitys.LoadingActivity">
 
     <ImageView
+        android:id="@+id/loading_logo"
         android:layout_width="320dp"
         android:layout_height="240dp"
         android:layout_alignParentTop="true"
@@ -15,6 +16,17 @@
         android:layout_marginTop="120dp"
         android:scaleType="centerInside"
         android:src="@drawable/logo_app" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tra cứu cửa hàng tiện lợi nhanh chóng.\nMang sự tiện lợi đến gần bạn."
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:textColor="#fff"
+        android:layout_below="@+id/loading_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
 
     <io.netopen.hotbitmapgg.library.view.RingProgressBar
         android:id="@+id/ringProgressBar"
