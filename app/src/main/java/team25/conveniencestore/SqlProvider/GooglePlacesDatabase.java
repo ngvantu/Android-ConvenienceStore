@@ -49,17 +49,17 @@ public abstract class GooglePlacesDatabase extends RoomDatabase {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot child : dataSnapshot.getChildren()) {
-                        String tempId = child.child("placeId").getValue().toString();
-                        String tempName = child.child("name").getValue().toString();
-                        String tempAddress = child.child("address").getValue().toString();
+                        String tempId = child.child("placeId").getValue() == null ? "" : child.child("placeId").getValue().toString();
+                        String tempName = child.child("name").getValue() == null ? "" : child.child("name").getValue().toString();
+                        String tempAddress = child.child("address").getValue() == null ? "" : child.child("address").getValue().toString();
 
-                        String tempLat = child.child("lat").getValue().toString();
+                        String tempLat = child.child("lat").getValue() == null ? "0" : child.child("lat").getValue().toString();
                         double lat = Double.valueOf(tempLat).doubleValue();
 
-                        String tempLng = child.child("lng").getValue().toString();
+                        String tempLng = child.child("lng").getValue() == null ? "0" : child.child("lng").getValue().toString();
                         double lng = Double.valueOf(tempLng).doubleValue();
 
-                        String tempRating = child.child("rating").getValue().toString();
+                        String tempRating = child.child("rating").getValue() == null ? "0" : child.child("rating").getValue().toString();
                         double rating = Double.valueOf(tempRating).doubleValue();
 
                         mDao.insertPlace(new GooglePlace(tempId, tempName, tempAddress, new LatLng(lat, lng), rating));
