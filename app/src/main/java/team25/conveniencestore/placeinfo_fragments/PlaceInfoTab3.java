@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import team25.conveniencestore.R;
@@ -55,21 +56,29 @@ public class PlaceInfoTab3 extends Fragment {
         userRatingBar = (RatingBar) view.findViewById(R.id.userRatingBar);
         userComment = (EditText) view.findViewById(R.id.userComment);
 
+        final String placeId = getArguments().getString("PLACE_ID");
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("reviews");
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this.getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        // mAdapter = new FirebaseCommentAdapter();
-        recyclerView.setAdapter(mAdapter);
-
-        myRef.addValueEventListener(new ValueEventListener() {
+        Query myQuery = database.getReference("reviews").orderByChild("placeid").equalTo(placeId);
+        myQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                float point = 4.4f;
+                float point = 0f;
+                int i = 0;
+
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    Log.i("ABCDXYZ " + getArguments().getString("PLACE_ID"), child.child("point").getValue().toString());
+                    String temp = child.child("point").getValue().toString();
+                    float tempFloat = Float.valueOf(temp).floatValue();
+                    point += tempFloat;
+                    i++;
+                }
+
+                if(i != 0) {
+                    point = point / i;
+                }
+
                 mAdapter = new FirebaseCommentAdapter(dataSnapshot);
                 ratingBar.setRating(point);
                 ratingPoint.setText(String.valueOf(point) + "/5");
@@ -80,6 +89,28 @@ public class PlaceInfoTab3 extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this.getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        // mAdapter = new FirebaseCommentAdapter();
+        recyclerView.setAdapter(mAdapter);
+
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                float point = 4.4f;
+//                mAdapter = new FirebaseCommentAdapter(dataSnapshot);
+//                ratingBar.setRating(point);
+//                ratingPoint.setText(String.valueOf(point) + "/5");
+//                recyclerView.setAdapter(mAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
