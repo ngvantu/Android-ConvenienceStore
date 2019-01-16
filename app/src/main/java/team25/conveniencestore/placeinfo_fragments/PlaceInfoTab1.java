@@ -1,12 +1,12 @@
 package team25.conveniencestore.placeinfo_fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +14,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.maps.model.LatLng;
 
 import team25.conveniencestore.R;
+import team25.conveniencestore.SqlProvider.GooglePlacesViewModel;
+import team25.conveniencestore.models.GooglePlace;
 
 public class PlaceInfoTab1 extends Fragment {
 
@@ -60,16 +61,15 @@ public class PlaceInfoTab1 extends Fragment {
         btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("favourites").push();
-
-                myRef.child("placeId").setValue(getArguments().getString("PLACE_ID"));
-                myRef.child("name").setValue(getArguments().getString("STORE_NAME"));
-                myRef.child("address").setValue(getArguments().getString("STORE_ADDRESS"));
-                myRef.child("lat").setValue(getArguments().getDouble("LAT"));
-                myRef.child("lng").setValue(getArguments().getDouble("LNG"));
-                myRef.child("rating").setValue(getArguments().getDouble("RATING"));
-
+                String placeID = getArguments().getString("PLACE_ID");
+                String name = getArguments().getString("STORE_NAME");
+                String address = getArguments().getString("STORE_ADDRESS");
+                double lat = getArguments().getDouble("LAT");
+                double lng = getArguments().getDouble("LNG");
+                double rating = getArguments().getDouble("RATING");
+                GooglePlace g = new GooglePlace(placeID,name,address,new LatLng(lat,lng),rating);
+                GooglePlacesViewModel viewModel = ViewModelProviders.of(getActivity()).get(GooglePlacesViewModel.class);
+                viewModel.insertPlace(g);
                 Toast.makeText(getActivity(), "Đã lưu vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
             }
         });
